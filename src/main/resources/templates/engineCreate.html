@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/engineList">Engine list</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Add engine</div>
+</div>
+
+<div class="ui raised very padded text container segment">
+    <form class="ui form" action="#" th:action="@{/engineCreate}" th:object="${engine}"
+          method="post" enctype="multipart/form-data">
+        <div class="field">
+            <label>Name</label>
+            <input type="text" name="name" placeholder="Name" th:field="*{name}">
+        </div>
+        <div class="field">
+            <label>Brand</label>
+            <select class="ui search dropdown" id="manufacturer" th:field="*{manufacturer}">
+                <option value="0"></option>
+                <option th:each="manufacturer : ${manufacturers}"
+                        th:value="${manufacturer.id}"
+                        th:text="${manufacturer.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Volume</label>
+            <input type="text" name="volume" placeholder="Volume" th:field="*{volume}">
+        </div>
+        <div class="field">
+            <label>Type</label>
+            <select class="ui search dropdown" id="engineType" th:field="*{engineType}">
+                <option value="0"></option>
+                <option th:each="engineType : ${engineTypes}"
+                        th:value="${engineType.id}"
+                        th:text="${engineType.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Power</label>
+            <input type="text" name="power" placeholder="Мощность" th:field="*{power}">
+        </div>
+        <div class="field">
+            <label>Torque</label>
+            <input type="text" name="torque" placeholder="Torque" th:field="*{torque}">
+        </div>
+        <div class="field">
+            <label>Fuel</label>
+            <select class="ui search dropdown" id="fuel" th:field="*{fuel}">
+                <option value="0"></option>
+                <option th:each="fuel : ${fuels}"
+                        th:value="${fuel.id}"
+                        th:text="${fuel.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Photo</label>
+            <input type="file" name="file">
+        </div>
+        <button class="ui button" type="submit">Add</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+</div>
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

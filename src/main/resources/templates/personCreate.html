@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/personList">Person list</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Add person</div>
+</div>
+
+<div class="ui raised very padded text container segment">
+    <form class="ui form" action="#" th:action="@{/personCreate}" th:object="${person}"
+          method="post" enctype="multipart/form-data">
+        <div class="field">
+            <label>Name</label>
+            <input type="text" name="name" placeholder="Name" th:field="*{name}">
+        </div>
+        <div class="field">
+            <label>Country</label>
+            <select class="ui search dropdown" id="country" th:field="*{country}">
+                <option value="0"></option>
+                <option th:each="country : ${countries}"
+                        th:value="${country.id}"
+                        th:text="${country.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Date of Birth</label>
+            <input type="text" name="dateOfBirth" placeholder="Date of Birth" th:field="*{dateOfBirth}">
+        </div>
+        <div class="field">
+            <label>Series</label>
+            <select class="ui search dropdown" id="series" th:field="*{series}">
+                <option value="0"></option>
+                <option th:each="series : ${series}"
+                        th:value="${series.id}"
+                        th:text="${series.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Team</label>
+            <select class="ui search dropdown" id="team" th:field="*{team}">
+                <option value="0"></option>
+                <option th:each="team : ${teams}"
+                        th:value="${team.id}"
+                        th:text="${team.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Description</label>
+            <textarea type="text" name="description" placeholder="Description" th:field="*{description}"></textarea>
+        </div>
+        <div class="field">
+            <div class="ui slider checkbox">
+                <input type="checkbox" name="navigator" th:checked="${person.navigator}">
+                <label>Co-driver</label>
+            </div>
+        </div>
+        <div class="field">
+            <label>Photo</label>
+            <input type="file" name="file">
+        </div>
+        <button class="ui button" type="submit">Add</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+</div>
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

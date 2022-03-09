@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Administration</div>
+</div>
+
+<div class="ui segment">
+    <div class="ui grid">
+        <div class="two wide column">
+            <div class="ui vertical menu">
+                <div class="item">
+                    <div class="header">Catalog</div>
+                    <div class="menu">
+                        <a class="item" href="/tunerList">Tuner list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/bodyList">Body list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/titleList">Title list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/driveList">Drive list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/bodyTypeNameList">Body style list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/engineList">Engine list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/engineTypeList">Engine type list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/fuelList">Fuel list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/gearBoxList">Transmission list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/gearBoxTypeList">Transmission type list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/specList">Market list</a>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="header">Autosport</div>
+                    <div class="menu">
+                        <a class="item" href="/raceList">Race list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/seriesList">Series list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/trackList">Track list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/raceClassList">Class list</a>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="header">Users</div>
+                    <div class="menu">
+                        <a class="item" href="/user">User list</a>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="header">Others</div>
+                    <div class="menu">
+                        <a class="item" href="/countryList">Country list</a>
+                    </div>
+                    <div class="menu">
+                        <a class="item" href="/personList">Person list</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="seven wide column">
+            <h3 class="ui dividing header">New spots</h3>
+            <div class="ui divided items">
+                <div class="item" th:each="newSpot: ${spots}" th:if="${newSpot.modification == null}">
+                    <div class="image">
+                        <a class="image" th:href="@{spotUpdate/{id}(id=${newSpot.id})}">
+                            <img class="ui small image" th:src="@{'/img/' + ${newSpot.photo1}}">
+                        </a>
+                    </div>
+                    <div class="content">
+                        <a class="header" th:if="${newSpot.manufacturer != null && newSpot.carmodel != null}"
+                           th:href="@{spotUpdate/{id}(id=${newSpot.id})}"
+                           th:text="${newSpot.manufacturer.name} + ' ' + ${newSpot.carmodel.name}"></a>
+                        <div class="meta">
+                            <span class="cinema"></span>
+                        </div>
+                        <div class="description">
+                            <p ></p>
+                        </div>
+                        <div class="extra">
+                            <div class="ui label"></div>
+                            <div class="ui label"></div>
+                            <div class="ui label"></div>
+                        </div>
+                        <div class="description">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="seven wide column">
+            <h3 class="ui dividing header">Processed spots</h3>
+            <div class="ui divided items">
+                <div class="item" th:each="processedSpot, iter: ${spots}" th:if="${processedSpot.modification != null}"
+                     th:unless="${iter.index > 10}">
+                    <div class="image">
+                        <a class="image" th:href="@{spotOpen/{id}(id=${processedSpot.id})}">
+                            <img class="ui small image" th:src="@{'/img/' + ${processedSpot.photo1}}">
+                        </a>
+                    </div>
+                    <div class="content">
+                        <a class="header" th:if="${processedSpot.manufacturer != null && processedSpot.carmodel != null}"
+                           th:href="@{spotOpen/{id}(id=${processedSpot.id})}"
+                           th:text="${processedSpot.manufacturer.name} + ' ' + ${processedSpot.carmodel.name}"></a>
+                        <div class="meta">
+                            <span class="cinema"></span>
+                        </div>
+                        <div class="description">
+                            <p ></p>
+                        </div>
+                        <div class="extra">
+                            <div class="ui label"></div>
+                            <div class="ui label"></div>
+                            <div class="ui label"></div>
+                        </div>
+                        <div class="description">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

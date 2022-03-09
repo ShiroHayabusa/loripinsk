@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Body list</div>
+</div>
+
+<div class="ui segment">
+    <form action="/bodyCreate">
+        <button class="ui basic button">
+            <i class="plus icon"></i>
+            Add body
+        </button>
+    </form>
+    <table class="ui striped table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Brand</th>
+            <th>Body</th>
+            <th>-</th>
+            <th>-</th>
+        </tr>
+        </thead>
+        <tbody th:each="body: ${bodies}">
+        <tr>
+            <td th:text="${body.id}"></td>
+            <td th:if="${body.manufacturer}" th:text="${body.manufacturer.name}"></td>
+            <td th:text="${body.name}"></td>
+            <td>
+                <a th:href="@{/bodyUpdate/{id}(id=${body.id})}">Edit</a>
+            </td>
+            <td>
+                <a th:href="@{/bodyDelete/{id}(id=${body.id})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Race list</div>
+</div>
+
+<div class="ui segment">
+    <form action="/raceCreate">
+        <button class="ui basic button">
+            <i class="plus icon"></i>
+            Add race
+        </button>
+    </form>
+    <table class="ui striped table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Race</th>
+            <th>Stage number</th>
+            <th>Season</th>
+            <th>Dates</th>
+            <th>Country</th>
+            <th>Series</th>
+            <th>Track</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody th:each="race: ${races}">
+        <tr>
+            <td th:text="${race.id}"></td>
+            <td th:text="${race.name}"></td>
+            <td th:text="${race.stageNumber}"></td>
+            <td th:text="${race.season}"></td>
+            <td th:text="${race.startDate} + ' - ' + ${race.finishDate}"></td>
+            <td th:if="${race.country}" th:text="${race.country.name}"></td>
+            <td th:text="${race.series.name}"></td>
+            <td th:if="${race.track != null}" th:text="${race.track.name}"></td>
+            <td sec:authorize ="hasAuthority('ADMIN')">
+                <a th:href="@{/raceUpdate/{id}(id=${race.id})}">
+                    <i class="edit link icon"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

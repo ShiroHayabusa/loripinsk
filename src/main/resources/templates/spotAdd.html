@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="isAuthenticated()">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Add spot</div>
+</div>
+
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider"></div>
+
+<div class="ui center aligned container">
+    <div class="ui small steps">
+        <div class="step">
+            <div class="content">
+                <div class="title">Select brand</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Select model</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Select generation</div>
+                <div class="description">Not required for some models</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Select car</div>
+                <div class="description">Not required for some models</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Add spot</div>
+                <div class="description">In the spots tab</div>
+            </div>
+        </div>
+
+    </div>
+    <form style="margin-left: 20px; margin-top: 15px" action="/catalog" sec:authorize ="isAuthenticated()">
+        <button class="ui primary button">
+            Go to catalog
+        </button>
+    </form>
+</div>
+<div class="ui divider"></div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

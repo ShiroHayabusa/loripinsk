@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Person list</div>
+</div>
+
+<div class="ui segment">
+    <form action="/personCreate">
+        <button class="ui basic button">
+            <i class="plus icon"></i>
+            Add person
+        </button>
+    </form>
+    <table class="ui striped table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th></th>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Date of birth</th>
+            <th>Series</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody th:each="person: ${persons}">
+        <tr>
+            <td th:text="${person.id}"></td>
+            <td>
+                <img class="ui tiny image" th:src="@{'/img/' + ${person.photo}}" alt="">
+            </td>
+            <td th:text="${person.name}"></td>
+            <td th:text="${person.country.name}"></td>
+            <td th:text="${person.dateOfBirth}"></td>
+            <td th:if="${person.series != null}" th:text="${person.series.name}"></td>
+            <td >
+                <a th:href="@{/personUpdate/{id}(id=${person.id})}">
+                    Edit
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

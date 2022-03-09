@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/catalog">Catalog</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/{id}(id=${generation.manufacturer.id})}" th:text="${generation.manufacturer.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${generation.carmodel.id})}"
+       th:text="${generation.carmodel.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id=${generation.id})}"
+       th:text="${generation.name}"></a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Edit generation</div>
+</div>
+
+<div class="ui raised very padded text container segment">
+    <form class="ui form" action="#" th:action="@{/generationUpdate}" th:object="${generation}"
+          method="post" enctype="multipart/form-data">
+        <div class="field">
+            <input readonly type="hidden" th:field="*{id}" id="id" placeholder="ID">
+        </div>
+        <div class="field">
+            <input readonly type="hidden" th:field="*{manufacturer}" id="manufacturer">
+        </div>
+        <div class="field">
+            <input readonly type="hidden" th:field="*{carmodel}" id="carmodel">
+        </div>
+        <div class="field">
+            <label>Generation</label>
+            <input type="text" name="gen" placeholder="Generation" th:field="*{name}">
+        </div>
+        <div class="field">
+            <label>Production</label>
+            <input type="text" name="years" placeholder="Production" th:field="*{years}">
+        </div>
+        <div class="field">
+            <label>Body</label>
+            <select class="ui search dropdown" id="body" th:field="*{body}">
+                <option value="0"></option>
+                <option th:each="body : ${bodies}"
+                        th:value="${body.id}"
+                        th:text="${body.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Description</label>
+            <textarea type="text" name="description" placeholder="Description" th:field="*{description}"></textarea>
+        </div>
+        <div class="field">
+            <label>Photo</label>
+            <input type="file" name="file">
+        </div>
+        <button class="ui button" type="submit">Save</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+</div>
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

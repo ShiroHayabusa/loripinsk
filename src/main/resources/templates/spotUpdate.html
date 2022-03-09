@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<style>
+    div.block{
+        display:inline-block;
+        max-width: 100%;
+        height: auto;
+        padding-left: 10px;
+    }
+</style>
+
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb" th:if="${spot.modification}">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/catalog">Catalog</a>
+    <i class="right angle icon divider"></i>
+    <a class="section"
+       th:href="@{/catalog/manufacturer/{id}(id =${spot.modification.bodyType.generation.manufacturer.id})}"
+       th:text="${spot.modification.bodyType.generation.manufacturer.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section"
+       th:href="@{/catalog/manufacturer/carmodel/{id}(id = ${spot.modification.bodyType.generation.carmodel.id})}"
+       th:text="${spot.modification.bodyType.generation.carmodel.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section"
+       th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id = ${spot.modification.bodyType.generation.id})}"
+       th:text="${spot.modification.bodyType.generation.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:if="${spot.modification.bodyType.restyle}"
+       th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id = ${spot.modification.bodyType.generation.id})}"
+       th:text="${spot.modification.bodyType.restyle.name}"></a>
+    <i class="right angle icon divider" th:if="${spot.modification.bodyType.restyle}"></i>
+    <a class="section"
+       th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id = ${spot.modification.bodyType.id})}"
+       th:text="${spot.modification.bodyType.bodyTypeName.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section"
+       th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id = ${spot.modification.id})}"
+       th:text="${spot.modification.name}"></a>
+    <i class="right angle icon divider"></i>
+    <div class="active section" th:text="'Спот ' + ${spot.id} + ' (разместил ' + ${spot.user.username} + ')'"></div>
+</div>
+
+<div class="ui container" style="margin-top:10px; margin-bottom: 10px">
+    <div class="ui segment">
+        <div class="ui two column grid">
+            <div class="column">
+                <h2 class="ui header" th:if="${spot.manufacturer != null && spot.carmodel != null}"
+                    th:text="${spot.manufacturer.name} + ' ' + ${spot.carmodel.name}"></h2>
+            </div>
+            <div class="column">
+                <img class="ui avatar image" th:src="@{'/img/' + ${spot.user.avatar}}">
+                <span th:text="${spot.user.username}"></span>
+                <div class="mini right floated ui left labeled button" tabindex="0">
+                    <div class="ui basic right pointing label" th:text="${spot.likes.size()}">
+                    </div>
+                    <a class="mini ui icon button" th:href="@{/spot/{spot}/like(spot=${spot.id})}">
+                        <i class="heart outline icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui divided horizontal list">
+            <div class="item" th:text="'Date: ' + ${spot.date}"></div>
+            <div class="item" th:if="${spot.country}" th:text="'Country: ' + ${spot.country.name}"></div>
+            <div class="item" th:text="'City: ' + ${spot.city}"></div>
+        </div>
+        <div class="ui divider"></div>
+
+        <div style="margin-left: 2px" class="ui medium images">
+            <a th:href="@{'/img/' + ${spot.photo1}}" data-fancybox="gallery">
+                <img style="margin-right:10px" th:src="@{'/img/' + ${spot.photo1}}">
+            </a>
+
+            <a th:href="@{'/img/' + ${spot.photo2}}" data-fancybox="gallery" >
+                <img  style="margin-right:10px" th:src="@{'/img/' + ${spot.photo2}}">
+            </a>
+
+            <a th:href="@{'/img/' + ${spot.photo3}}" data-fancybox="gallery">
+                <img th:src="@{'/img/' + ${spot.photo3}}">
+            </a>
+        </div>
+        <div class="ui divider"></div>
+        <p th:text="${spot.description}"></p>
+
+        <form class="ui form" th:action="@{/spotUpdate}" th:object="${spot}" method="post">
+            <div class="field">
+                <input readonly type="hidden" th:field="*{id}" id="id">
+            </div>
+            <div class="field">
+                <input readonly type="hidden" th:field="*{description}" id="description">
+            </div>
+            <div class="field">
+                <input readonly type="hidden" th:field="*{country}" id="country">
+            </div>
+            <div class="field">
+                <input readonly type="hidden" th:field="*{city}" id="city">
+            </div>
+            <div class="field">
+                <input readonly type="hidden" th:field="*{date}" id="date">
+            </div>
+            <div class="field">
+                <input readonly type="hidden" th:field="*{user}" id="user">
+            </div>
+            <div class="field">
+                <input readonly type="hidden" th:field="*{manufacturer}" id="manufacturer">
+            </div>
+            <div class="field">
+                <input readonly type="hidden" th:field="*{carmodel}" id="carmodel">
+            </div>
+            <div class="field">
+                <input readonly type="hidden" th:field="*{photo1}" id="photo1">
+            </div>
+            <div class="field">
+                <input readonly type="hidden" th:field="*{photo2}" id="photo2">
+            </div>
+            <div class="field">
+                <input readonly type="hidden" th:field="*{photo3}" id="photo3">
+            </div>
+            <div class="field">
+                <label>Car</label>
+                <select class="ui search dropdown" id="modification" th:field="*{modification}">
+                    <option value="0"></option>
+                    <option th:each="modification : ${modifications}"
+                            th:value="${modification.id}"
+                            th:text="${modification.bodyType.generation.manufacturer.name} + ' ' +
+                                     ${modification.bodyType.generation.carmodel.name} + ' ' +
+                                     ${modification.name}">
+                    </option>
+                </select>
+            </div>
+            <button class="ui button" type="submit">Save</button>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        </form>
+
+        <div class="ui small comments" >
+            <h3 class="ui header">Comments</h3>
+            <div class="comment" th:each="comment: ${comments}">
+                <a class="avatar">
+                    <img th:if="${comment.user}"
+                         th:src="@{'/img/' + ${comment.user.avatar}}">
+                </a>
+                <div class="content">
+                    <a class="author" th:if="${comment.user}"
+                       th:text="${comment.user.username}"></a>
+                    <div class="metadata">
+                        <span class="date" th:text="${comment.date}"></span>
+                        <div class="rating">
+                            <i class="star icon"></i>
+                            <span th:text="${comment.user.rating}"></span>
+                        </div>
+                    </div>
+                    <div class="text" th:text="${comment.text}">
+                    </div>
+                    <div class="actions">
+                        <a class="reply" th:href="@{/replyCreate/{id}(id=${comment.id})}" sec:authorize="isAuthenticated()">Reply</a>
+                    </div>
+                </div>
+                <div class="comments">
+                    <div class="comment" th:each="reply: ${replies}" th:if="${reply.comment.id == comment.id}">
+                        <a class="avatar">
+                            <img th:if="${reply.user}"
+                                 th:src="@{'/img/' + ${reply.user.avatar}}">
+                        </a>
+                        <div class="content">
+                            <a class="author" th:if="${reply.user}"
+                               th:text="${reply.user.username}"></a>
+                            <div class="metadata">
+                                <span class="date" th:text="${reply.date}"></span>
+                                <div class="rating">
+                                    <i class="star icon"></i>
+                                    <span th:text="${reply.user.rating}"></span>
+                                </div>
+                            </div>
+                            <div class="text" th:text="${reply.text}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </p>
+    </div>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+
+</body>
+</html>

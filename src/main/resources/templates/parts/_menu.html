@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.w3.org/1999/xhtml">
+
+<body>
+<div class="ui mini inverted menu" th:fragment="menu">
+    <div class="header item">
+        <h4>
+            <a style="color:#FFFFFF;" href="/">Loripin.com</a>
+        </h4>
+    </div>
+    <a class="item" href="/">
+        Home
+    </a>
+    <!--    <a class="item">
+            Статьи
+        </a> !-->
+    <a class="item" href="/catalog">
+        <i class="car icon"></i>
+        Catalog
+    </a>
+    <a class="item" href="/autosport">
+        Autosport
+    </a>
+    <a class="item" href="/spots">
+        Spots
+    </a>
+    <!--<a class="item">
+        Events
+    </a> !-->
+    <div class="right menu">
+        <a class="item" href="/user/profile" sec:authorize ="hasAuthority('USER')">
+            <i class="user icon"></i>
+            Profile
+        </a>
+        <a class="item" href="/adminPage" sec:authorize ="hasAuthority('ADMIN')">
+            <i class="cogs icon"></i>
+            Administration
+        </a>
+        <!--         <div class="item">
+                  <form class="ui form" action="#" th:action="@{/}" th:object="${article}" method="get">
+                      <div class="ui search">
+                          <input class="prompt" type="text" name="filter" placeholder="Search..." th:value="${filter}">
+                      </div>
+                  </form>
+              </div>
+              <div class="ui dropdown item">
+                  Language <i class="dropdown icon"></i>
+                  <div class="menu">
+                      <a class="item">English</a>
+                      <a class="item">Russian</a>
+                  </div>
+              </div> !-->
+        <div class="item" sec:authentication="name" sec:authorize="isAuthenticated()"></div>
+
+        <div class="item" sec:authorize="!isAuthenticated()">
+            <form action="/login">
+                <button class="ui inverted button" type="submit">
+                    <i class="sign in alternate icon"></i>
+                    Sign in
+                </button>
+            </form>
+        </div>
+
+        <div class="item">
+            <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+                <button class="ui inverted button" type="submit">
+                    <i class="sign out alternate icon"></i>
+                    Log out
+                </button>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

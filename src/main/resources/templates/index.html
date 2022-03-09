@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<style type="text/css">
+  li {display: inline}
+</style>
+
+<body>
+<!-- <form style="margin-left: 20px; margin-top: 15px" action="/spotCreate" sec:authorize ="isAuthenticated()">
+  <button class="ui basic button">
+    <i class="plus icon"></i>
+    Добавить спот
+  </button>
+</form>
+
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>!-->
+<div class="ui internally celled grid">
+  <div class="ten wide column">
+    <div class="ui three cards" >
+      <div class="ui card" th:each="spot, iter1: ${spots}" th:unless="${iter1.index > 8}">
+        <div class="content">
+          <div class="right floated meta" th:text="${spot.date}"></div>
+          <img class="ui avatar image" th:if="#{spot.user}"
+               th:src="@{'/img/' + ${spot.user.avatar}}" th:text="${spot.user.username}">
+        </div>
+        <a class="image" th:href="@{spotOpen/{id}(id=${spot.id})}">
+          <img th:src="@{'/img/' + ${spot.photo1}}">
+        </a>
+        <div class="extra content">
+          <a th:href="@{spotOpen/{id}(id=${spot.id})}" th:if="${spot.manufacturer != null && spot.carmodel != null}"
+             th:text="${spot.manufacturer.name} + ' ' + ${spot.carmodel.name}"></a>
+        </div>
+        <div class="extra content" >
+          <div class="mini right floated ui left labeled button" tabindex="0" th:if="${spot.meLiked}" sec:authorize ="isAuthenticated()">
+            <div class="ui basic right pointing label" th:text="${spot.likes}">
+            </div>
+            <a class="mini ui icon button" th:href="@{/spot/{spot}/like(spot=${spot.id})}">
+              <i class="red heart icon"></i>
+            </a>
+          </div>
+          <div class="mini right floated ui left labeled button" tabindex="0" th:if="${spot.meLiked}" sec:authorize ="!isAuthenticated()">
+            <div class="ui basic right pointing label" th:text="${spot.likes}">
+            </div>
+            <a class="mini ui icon button" data-content="For authorized users only!">
+              <i class="red heart icon"></i>
+            </a>
+          </div>
+          <div class="mini right floated ui left labeled button" tabindex="0" th:if="${!spot.meLiked}" sec:authorize ="isAuthenticated()">
+            <div class="ui basic right pointing label" th:text="${spot.likes}">
+            </div>
+            <a class="mini ui icon button" th:href="@{/spot/{spot}/like(spot=${spot.id})}" >
+              <i class="heart outline icon"></i>
+            </a>
+          </div>
+          <div class="mini right floated ui left labeled button" tabindex="0" th:if="${!spot.meLiked}" sec:authorize ="!isAuthenticated()">
+            <div class="ui basic right pointing label" th:text="${spot.likes}">
+            </div>
+            <a class="mini ui icon button" data-content="For authorized users only!">
+              <i class="heart outline icon"></i>
+            </a>
+          </div>
+
+          <div class="mini ui right labeled button" tabindex="0">
+            <a class="mini ui icon button" th:href="@{spotOpen/{id}(id=${spot.id})}">
+              <i class="comment icon"></i>
+            </a>
+            <div class="ui basic left pointing label"
+                 th:text="${spot.comments.size() + spot.replies.size()}">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="six wide column">
+    <div class="row">
+      <h2 class="ui header">
+        <i class="plus circle icon"></i>
+        <div class="content">
+          Last
+          <div class="sub header">added cars</div>
+        </div>
+      </h2>
+      <div class="ui divided items">
+        <div class="item" th:each="modification, iter: ${modifications}" th:unless="${iter.index > 1}">
+          <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}
+            (id=${modification.id})}">
+            <img th:src="@{'/img/' + ${modification.photo}}">
+          </a>
+          <div class="content">
+            <a class="header" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}
+            (id=${modification.id})}"
+               th:text="${modification.bodyType.generation.manufacturer.name} + ' ' +
+            ${modification.bodyType.generation.carmodel.name} + ' ' + ${modification.name}"></a>
+            <div class="meta">
+              <span class="cinema" th:text="${modification.years}"></span>
+            </div>
+            <div class="description">
+              <p></p>
+            </div>
+            <div class="extra">
+              <div class="ui label" th:if="${modification.body}"
+                   th:text="${modification.body.name}"></div>
+              <div class="ui label" th:if="${modification.engine}"
+                   th:text="${modification.engine.name}"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ui divider"></div>
+    <div class="row">
+      <h2 class="ui header">
+        <i class="database icon"></i>
+        <div class="content">
+          Database
+          <div class="sub header">statistics</div>
+        </div>
+      </h2>
+      <div class="ui horizontal statistics">
+        <div class="statistic">
+          <div class="value" th:text="${spots.size()}"></div>
+          <div class="label">
+            spots
+          </div>
+        </div>
+        <div class="statistic">
+          <div class="value" th:text="${modifications.size()}"></div>
+          <div class="label">
+            cars
+          </div>
+        </div>
+        <div class="statistic">
+          <div class="value" th:text="${manufacturers.size()}"></div>
+          <div class="label">
+            brands
+          </div>
+        </div>
+        <div class="statistic">
+          <div class="value" th:text="${carmodels.size()}"></div>
+          <div class="label">
+            models
+          </div>
+        </div>
+
+        <div class="statistic">
+          <div class="value" th:text="${photoCount}"></div>
+          <div class="label">
+            photos
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+
+<script>
+  $(document).ready(function () {
+    console.log("Hello");
+  });
+</script>
+<script>
+  $('.button').popup();
+</script>
+
+</body>
+
+</html>

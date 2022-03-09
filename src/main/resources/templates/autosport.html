@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Autosport</div>
+</div>
+<div class="ui segment">
+    <div class="ui five stackable cards">
+        <div class="card" th:each="series: ${series}">
+            <a class="image" th:href="@{/autosport/{id}(id=${series.id})}">
+                <img th:src="@{'/img/' + ${series.photo}}">
+            </a>
+            <div class="content">
+                <a class="header" th:text="${series.name}" th:href="@{/autosport/{id}(id=${series.id})}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

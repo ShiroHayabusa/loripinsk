@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Список двигателей</div>
+</div>
+
+<div class="ui container" style="margin-top:10px; margin-bottom: 10px">
+    <div class="ui segment">
+
+        <form th:action="@{/engineUpdate/{id}(id=${engine.id})}" sec:authorize="hasAuthority('ADMIN')">
+            <button class="ui basic button">
+                <i class="plus icon"></i>
+                Редактировать двигатель
+            </button>
+        </form>
+
+        <h3 class="ui dividing header" th:if="${engine.manufacturer}" th:text="'Характеристики двигателя ' +
+${engine.manufacturer.name} + ' ' + ${engine.name}">
+        </h3>
+        <div class="ui three column stackable grid container">
+            <div class="column">
+                <img class="ui medium image" th:src="'/img/' + ${engine.photo}" alt="">
+            </div>
+
+            <div class="column">
+                <table class="ui small selectable very basic celled table">
+                    <tbody>
+                    <tr>
+                        <td>Тип двигателя</td>
+                        <td th:if="${engine.engineType}" th:text="${engine.engineType.name}"></td>
+                    </tr>
+                    <tr>
+                        <td>Объем (л)</td>
+                        <td th:text="${engine.volume}"></td>
+                    </tr>
+                    <tr>
+                        <td>Мощность (л.с.)</td>
+                        <td th:text="${engine.power}"></td>
+                    </tr>
+                    <tr>
+                        <td>Крутящий момент (Нм)</td>
+                        <td th:text="${engine.torque}"></td>
+                    </tr>
+                    <tr>
+                        <td>Топливо</td>
+                        <td th:if="${engine.fuel}" th:text="${engine.fuel.name}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <h3 class="ui dividing header">
+            Автомобили с этим двигателем
+        </h3>
+        <div class="ui divided items">
+            <div class="item" th:each="modification: ${modifications}">
+                <a class="image"
+                   th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}
+            (id=${modification.id})}">
+                    <img th:src="@{'/img/' + ${modification.photo}}">
+                </a>
+                <div class="content">
+                    <a class="header" th:text="${modification.bodyType.generation.manufacturer.name} +
+                                         ' ' + ${modification.bodyType.generation.carmodel.name} +
+                                         ' ' + ${modification.name}"
+                       th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}
+            (id=${modification.id})}"></a>
+                    <div class="meta">
+                        <span class="cinema" th:text="${modification.bodyType.generation.name}"></span>
+                    </div>
+                    <div class="description">
+                        <p th:text="${modification.years}"></p>
+                    </div>
+                    <div class="extra">
+                        <div class="ui label" th:if="${modification.body}"
+                             th:text="${modification.body.name}"></div>
+                        <div class="ui label" th:if="${modification.spec}"
+                             th:text="${modification.spec.name}"></div>
+                        <div class="ui label" th:if="${modification.tuner}"
+                             th:text="${modification.tuner.name}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

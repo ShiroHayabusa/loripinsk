@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/catalog">Catalog</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/{id}(id =${modification.bodyType.generation.manufacturer.id})}"
+       th:text="${modification.bodyType.generation.manufacturer.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/carmodel/{id}(id = ${modification.bodyType.generation.carmodel.id})}"
+       th:text="${modification.bodyType.generation.carmodel.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id = ${modification.bodyType.generation.id})}"
+       th:text="${modification.bodyType.generation.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:if="${modification.bodyType.restyle}"
+       th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id = ${modification.bodyType.generation.id})}"
+       th:text="${modification.bodyType.restyle.name}"></a>
+    <i class="right angle icon divider" th:if="${modification.bodyType.restyle}"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id = ${modification.bodyType.id})}"
+       th:text="${modification.bodyType.bodyTypeName.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id = ${modification.id})}" th:text="${modification.name}"></a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Edit car</div>
+</div>
+
+<div style="margin-bottom: 20px" class="ui container">
+    <form class="ui form" th:action="@{/modificationUpdate}" th:object="${modification}" method="post"
+          enctype="multipart/form-data">
+        <h4 class="ui dividing header">General information</h4>
+        <div class="field">
+            <input readonly type="hidden" th:field="*{id}" id="id" placeholder="ID">
+        </div>
+        <div class="field">
+            <input readonly type="hidden" th:field="*{bodyType}" id="bodyType">
+        </div>
+        <div class="field">
+            <div class="fields">
+                <div class="four wide field">
+                    <label>Car</label>
+                    <input type="text" th:field="*{name}" id="heading" placeholder="Car">
+                </div>
+                <div class="four wide field">
+                    <label>Production</label>
+                    <input type="text" th:field="*{years}" id="years" placeholder="Production">
+                </div>
+                <div class="four wide field">
+                    <label>Amount</label>
+                    <input type="text" th:field="*{amount}" id="amount" placeholder="Amount">
+                </div>
+                <div class="four wide field">
+                    <label>Market</label>
+                    <select class="ui search dropdown" id="spec" th:field="*{spec}">
+                        <option value="0"></option>
+                        <option th:each="spec : ${specs}"
+                                th:value="${spec.id}"
+                                th:text="${spec.name}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label>Description</label>
+            <textarea type="text" th:field="*{description}" id="description" placeholder="Description"></textarea>
+        </div>
+        <h4 class="ui dividing header">Engine</h4>
+        <div class="field">
+            <div class="fields">
+                <div class="five wide field">
+                    <label>Engine model</label>
+                    <select class="ui search dropdown" id="engine" th:field="*{engine}">
+                        <option value="0"></option>
+                        <option th:each="engine : ${engines}"
+                                th:value="${engine.id}"
+                                th:text="${engine.getName()}">
+                        </option>
+                    </select>
+                </div>
+                <div class="five wide field">
+                    <label>Power</label>
+                    <input type="text" th:field="*{power}" id="power" placeholder="Power">
+                </div>
+                <div class="six wide field">
+                    <label>Torque</label>
+                    <input type="text" th:field="*{torque}" id="torque" placeholder="Torque">
+                </div>
+
+            </div>
+            <div class="fields">
+                <div class="five wide field">
+                    <label>Engine type</label>
+                    <select class="ui search dropdown" id="engineType" th:field="*{engineType}">
+                        <option value="0"></option>
+                        <option th:each="engineType : ${engineTypes}"
+                                th:value="${engineType.id}"
+                                th:text="${engineType.getName()}">
+                        </option>
+                    </select>
+                </div>
+                <div class="five wide field">
+                    <label>Volume</label>
+                    <input type="text" th:field="*{engineVolume}" id="engineVolume" placeholder="Volume">
+                </div>
+                <div class="six wide field">
+                    <label>Fuel</label>
+                    <select class="ui search dropdown" id="fuel" th:field="*{fuel}">
+                        <option value="0"></option>
+                        <option th:each="fuel : ${fuels}"
+                                th:value="${fuel.id}"
+                                th:text="${fuel.getName()}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <h4 class="ui dividing header">Transmission</h4>
+        <div class="field">
+            <div class="fields">
+                <div class="five wide field">
+                    <label>Transmission</label>
+                    <select class="ui search dropdown" id="gearBox" th:field="*{gearBox}">
+                        <option value="0"></option>
+                        <option th:each="gearBox : ${gearBoxes}"
+                                th:value="${gearBox.id}"
+                                th:text="${gearBox.getName()}">
+                        </option>
+                    </select>
+                </div>
+                <div class="five wide field">
+                    <label>Transmission type</label>
+                    <select class="ui search dropdown" id="gearBoxType" th:field="*{gearBoxType}">
+                        <option value="0"></option>
+                        <option th:each="gearBoxType : ${gearBoxTypes}"
+                                th:value="${gearBoxType.id}"
+                                th:text="${gearBoxType.getName()}">
+                        </option>
+                    </select>
+                </div>
+                <div class="six wide field">
+                    <label>Drive</label>
+                    <select class="ui search dropdown" id="drive" th:field="*{drive}">
+                        <option value="0"></option>
+                        <option th:each="drive : ${drives}"
+                                th:value="${drive.id}"
+                                th:text="${drive.getName()}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <h4 class="ui dividing header">Body</h4>
+        <div class="field">
+            <div class="two fields">
+                <div class="field">
+                    <label>Body model</label>
+                    <select class="ui search dropdown" id="body" th:field="*{body}">
+                        <option value="0"></option>
+                        <option th:each="body : ${bodies}"
+                                th:value="${body.id}"
+                                th:text="${body.getName()}">
+                        </option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label>Curb weight</label>
+                    <input type="text" th:field="*{weight}" id="weight" placeholder="Curb weight">
+                </div>
+            </div>
+            <div class="fields">
+                <div class="four wide field">
+                    <label>Length</label>
+                    <input type="text" th:field="*{length}" id="length" placeholder="Length">
+                </div>
+                <div class="four wide field">
+                    <label>Width</label>
+                    <input type="text" th:field="*{width}" id="width" placeholder="Width">
+                </div>
+                <div class="four wide field">
+                    <label>Height</label>
+                    <input type="text" th:field="*{height}" id="height" placeholder="Height">
+                </div>
+                <div class="four wide field">
+                    <label>Wheelbase</label>
+                    <input type="text" th:field="*{base}" id="base" placeholder="Wheelbase">
+                </div>
+            </div>
+        </div>
+        <h4 class="ui dividing header">Dynamic characteristics</h4>
+        <div class="two fields">
+            <div class="field">
+                <label>Maximum speed</label>
+                <input type="text" name="maxSpeed" placeholder="Maximum speed" th:field="*{maxSpeed}">
+            </div>
+            <div class="field">
+                <label>Acceleration time to 100 km/h</label>
+                <input type="text" name="acceleration" placeholder="Acceleration time to 100 km/h" th:field="*{acceleration}">
+            </div>
+        </div>
+
+        <h4 class="ui dividing header">Electrical specifications</h4>
+        <div class="two fields">
+            <div class="field">
+                <label>Battery capacity</label>
+                <input type="text" name="battery" placeholder="Battery capacity" th:field="*{battery}">
+            </div>
+            <div class="field">
+                <label>Range</label>
+                <input type="text" name="range" placeholder="Range" th:field="*{range}">
+            </div>
+        </div>
+
+        <h4 class="ui dividing header">Other parameters</h4>
+        <div class="two fields">
+            <div class="field">
+                <label>Tuning</label>
+                <select class="ui search dropdown" id="tuning" th:field="*{tuner}">
+                    <option value="0"></option>
+                    <option th:each="tuner : ${tuners}"
+                            th:value="${tuner.id}"
+                            th:text="${tuner.getName()}">
+                    </option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Series</label>
+                <select class="ui search dropdown" id="series" th:field="*{series}">
+                    <option value="0"></option>
+                    <option th:each="series : ${series}"
+                            th:value="${series.id}"
+                            th:text="${series.getName()}">
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="ui segment">
+            <div class="fields">
+                <div class="five wide field">
+                    <div class="ui slider checkbox">
+                        <input type="checkbox" name="electric" th:checked="${modification.electric}">
+                        <label>Electric car</label>
+                    </div>
+                </div>
+                <div class="five wide field">
+                    <div class="ui slider checkbox">
+                        <input type="checkbox" name="hybrid" th:checked="${modification.hybrid}">
+                        <label>Hybrid</label>
+                    </div>
+                </div>
+                <div class="five wide field">
+                    <div class="ui slider checkbox">
+                        <input type="checkbox" name="uniq" th:checked="${modification.uniq}">
+                        <label>Unique</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="ui dividing header">Photos</h4>
+        <div class="two fields">
+            <div class="field">
+                <label>Title photo</label>
+                <input type="file" name="file1">
+            </div>
+            <div class="field">
+                <label>Other photos</label>
+                <input type="file" name="files" multiple>
+            </div>
+        </div>
+
+        <button class="ui button" type="submit">Save</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

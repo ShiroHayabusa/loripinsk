@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Class list</div>
+</div>
+
+<div class="ui segment">
+    <form action="/raceClassCreate">
+        <button class="ui basic button">
+            <i class="plus icon"></i>
+            Add class
+        </button>
+    </form>
+    <table class="ui striped table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Series</th>
+        </tr>
+        </thead>
+        <tbody th:each="raceClass: ${raceClasses}">
+        <tr>
+            <td th:text="${raceClass.id}"></td>
+            <td th:text="${raceClass.name}"></td>
+            <td th:text="${raceClass.series.name}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.w3.org/1999/xhtml">
+
+<body>
+
+<div class="ui vertical menu" th:fragment="sidebar">
+    <div class="item">
+        <div class="header" th:text="${series.getName()}"></div>
+        <div class="menu">
+            <a class="item" th:href="@{/autosport/calendar/{id}(id=${series.id})}">Calendar</a>
+            <a class="item" th:href="@{/autosport/archive/{id}(id=${series.id})}">Archive</a>
+            <a class="item" th:href="@{/autosport/persons/{id}(id=${series.id})}">Persons</a>
+            <a class="item" th:href="@{/autosport/teams/{id}(id=${series.id})}">Teams</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

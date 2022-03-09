@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/catalog">Catalog</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/{id}(id=${manufacturer.id})}" th:text="${manufacturer.name}"></a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Edit brand</div>
+</div>
+
+<div class="ui raised very padded text container segment">
+    <form class="ui form" action="#" th:action="@{/manufacturerUpdate}" th:object="${manufacturer}"
+          method="post" enctype="multipart/form-data">
+        <div class="field">
+            <input readonly type="hidden" th:field="*{id}" id="id" placeholder="ID">
+        </div>
+        <div class="field">
+            <label>Brand</label>
+            <input type="text" name="name" placeholder="Brand" th:field="*{name}">
+        </div>
+        <div class="field">
+            <label>Country</label>
+            <select class="ui search dropdown" id="country" th:field="*{country}">
+                <option value="0"></option>
+                <option th:each="country : ${countries}"
+                        th:value="${country.id}"
+                        th:text="${country.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Description</label>
+            <textarea type="text" name="description" placeholder="Description" th:field="*{description}"></textarea>
+        </div>
+        <div class="field">
+            <label>Logo</label>
+            <input type="file" name="file">
+        </div>
+        <button class="ui button" type="submit">Save</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
+</body>
+</html>

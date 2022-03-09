@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/autosport">Autosport</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section" th:text="${series.getName()}"></div>
+</div>
+
+<div class="ui segment">
+    <div class="ui grid">
+        <div class="three wide column">
+            <div th:insert="parts/_sidebar :: sidebar"></div>
+        </div>
+        <div class="six wide column">
+            <h3 class="ui dividing header">
+                Standings
+            </h3>
+            <table class="ui small very basic collapsing celled table">
+                <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Pilot</th>
+                    <th>Points</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="pilot, iter: ${pilots}" th:if="${pilot.points2021}">
+                    <td th:text="${iter.count}">
+
+                    </td>
+                    <td>
+                        <h4 class="ui image header">
+                            <img th:src="@{'/img/' + ${pilot.photo}}" class="ui mini rounded image">
+                            <div class="content">
+                                <a th:href="@{/personOpen/{id}(id=${pilot.id})}"
+                                   th:text="${pilot.name}">
+                                </a>
+                                <div class="sub header" th:if="${pilot.team}" th:text="${pilot.team.name}">
+                                </div>
+                            </div>
+                        </h4></td>
+                    <td th:text="${pilot.points2021}">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="six wide column">
+            <h3 class="ui dividing header">
+                Team standings
+            </h3>
+            <table class="ui small very basic collapsing celled table">
+                <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Team</th>
+                    <th>Points</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="team, iter: ${teams}" th:if="${team.points2021}">
+                    <td th:text="${iter.count}">
+
+                    </td>
+                    <td>
+                        <h4 class="ui image header">
+                            <img th:if="${team.logo}"
+                                 th:src="@{'/img/' + ${team.logo} }" class="ui mini rounded image">
+                            <div class="content" >
+                                <a th:href="@{/teamOpen/{id}(id=${team.id})}" th:text="${team.name}"
+                                </a>
+                                <div class="sub header">
+                                </div>
+                            </div>
+                        </h4></td>
+                    <td th:text="${team.points2021}">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

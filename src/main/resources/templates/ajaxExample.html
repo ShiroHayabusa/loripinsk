@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+
+<div class="ui card" style="margin-left: 15px" th:each="spot: ${spots}">
+    <div class="content">
+        <div class="right floated meta" th:text="${spot.date}"></div>
+        <img class="ui avatar image" th:if="#{spot.user}"
+             th:src="@{'/img/' + ${spot.user.avatar}}" th:text="${spot.user.username}">
+    </div>
+    <a class="image" th:href="@{spotOpen/{id}(id=${spot.id})}">
+        <img th:src="@{'/img/' + ${spot.photo1}}">
+    </a>
+    <div class="extra content">
+        <a th:href="@{spotOpen/{id}(id=${spot.id})}"
+           th:text="${spot.modification.bodyType.generation.manufacturer.name} + ' ' +
+            ${spot.modification.bodyType.generation.carmodel.name} + ' ' + ${spot.modification.name}"></a>
+    </div>
+    <div class="extra content" >
+        <div class="mini right floated ui left labeled button" tabindex="0" th:if="${spot.meLiked}">
+            <a class="ui basic right pointing label" th:text="${spot.likes}">
+            </a>
+            <a class="mini ui icon button" th:href="@{/spot/{spot}/like(spot=${spot.id})}">
+                <i class="heart icon"></i>
+            </a>
+        </div>
+        <div class="mini right floated ui left labeled button" tabindex="0" th:if="${!spot.meLiked}">
+            <a class="ui basic right pointing label" th:text="${spot.likes}">
+            </a>
+            <a class="mini ui icon button" th:href="@{/spot/{spot}/like(spot=${spot.id})}">
+                <i class="heart outline icon"></i>
+            </a>
+        </div>
+
+        <div class="mini ui right labeled button" tabindex="0">
+            <div class="mini ui icon button" >
+                <i class="comment icon"></i>
+            </div>
+            <a class="ui basic left pointing label" th:href="@{spotOpen/{id}(id=${spot.id})}"
+               th:text="${spot.comments.size() + spot.replies.size()}">
+            </a>
+        </div>
+    </div>
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<style>
+    div.block{
+        display:inline-block;
+        max-width: 100%;
+        height: auto;
+        padding-left: 10px;
+    }
+</style>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/tunerList">Tuner list</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section" th:text="${tuner.name}"></div>
+</div>
+
+<h3 style="margin-left:20px; margin-right:20px" class="ui dividing header" th:text="${tuner.name}">
+</h3>
+<form style="margin-left: 20px" th:action="@{/tunerUpdate/{id}(id=${tuner.id})}" sec:authorize ="hasAuthority('ADMIN')">
+    <button class="ui basic button">
+        <i class="edit icon"></i>
+        Edit
+    </button>
+</form>
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
+
+
+<body>
+<div style="margin-left: 6px; margin-bottom: 10px" class="ui grid">
+    <div class="four wide column">
+        <img class="ui medium image" th:src="${'/img/' + tuner.logo}">
+    </div>
+    <div class="eight wide column">
+        <span>Country: </span>
+        <span th:text="${tuner.country.name}"></span>
+        <p></p>
+        <span th:text="${tuner.description}"></span>
+    </div>
+    <div class="four wide column">
+
+    </div>
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

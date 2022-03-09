@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+  <a class="section" href="/">Home</a>
+  <i class="right angle icon divider"></i>
+  <a class="section" href="/autosport">Autosport</a>
+  <i class="right angle icon divider"></i>
+  <a class="section" th:href="@{/autosport/{id}(id=${series.id})}" th:text="${series.name}"></a>
+  <i class="right angle icon divider"></i>
+  <div class="active section">Teams</div>
+</div>
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
+<form style="margin-left: 20px" action="/teamCreate" sec:authorize ="hasAuthority('ADMIN')">
+  <button class="ui basic button">
+    <i class="plus icon"></i>
+    Add team
+  </button>
+</form>
+<div class="ui segment">
+  <div class="ui grid">
+    <div class="three wide column">
+      <div th:insert="parts/_sidebar :: sidebar"></div>
+    </div>
+    <div class="thirteen wide column">
+      <h3 class="ui dividing header">
+        Teams
+      </h3>
+      <div class="ui four column doubling stackable grid container">
+        <div class="column">
+          <div class="ui link list">
+            <h3 class="ui dividing header">
+              A
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'A')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              B
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'B')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              C
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'C')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              D
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'D')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              E
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'E')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+            <h3 class="ui dividing header">
+              F
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'F')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+            <h3 class="ui dividing header">
+              G
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'G')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="ui link list">
+
+
+
+
+            <h3 class="ui dividing header">
+              H
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'H')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              I
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'I')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              J
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'J')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+            <h3 class="ui dividing header">
+              K
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'K')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              L
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'L')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+            <h3 class="ui dividing header">
+              M
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'M')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              N
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'N')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="ui link list">
+
+
+
+
+            <h3 class="ui dividing header">
+              O
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'O')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+            <h3 class="ui dividing header">
+              P
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'P')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              Q
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'Q')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              R
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'R')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+            <h3 class="ui dividing header">
+              S
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'S')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+            <h3 class="ui dividing header">
+              T
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'T')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              U
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'U')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <div class="ui link list">
+
+
+
+
+            <h3 class="ui dividing header">
+              V
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'V')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              W
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'W')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+            <h3 class="ui dividing header">
+              X
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'X')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+            <h3 class="ui dividing header">
+              Y
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'Y')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+
+            <h3 class="ui dividing header">
+              Z
+            </h3>
+            <div th:each="team: ${teams}" th:if="${#strings.startsWith(team.name,'Z')}">
+              <a class="item" th:href="@{/teamOpen/{id}(id=${team.id})}">
+                <span th:text="${team.name}"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="isAuthenticated()">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+
+
+<div class="ui raised very padded text container segment">
+    <div class="ui comments" >
+        <h3 class="ui dividing header">Comment</h3>
+        <div class="comment">
+            <a class="avatar">
+                <img th:if="${comment.user}"
+                     th:src="@{'/img/' + ${comment.user.avatar}}">
+            </a>
+            <div class="content">
+                <a class="author" th:if="${comment.user}"
+                   th:text="${comment.user.username}"></a>
+                <div class="metadata">
+                    <span class="date" th:text="${comment.date}"></span>
+                    <div class="rating">
+                        <i class="star icon"></i>
+                        <span th:text="${comment.user.rating}"></span>
+                    </div>
+                </div>
+                <div class="text" th:text="${comment.text}">
+                </div>
+            </div>
+        </div>
+        <form class="ui reply form" th:action="@{/replyCreate}" th:object="${reply}"
+              method="post" sec:authorize="isAuthenticated()">
+            <div class="field">
+                <textarea th:field="*{text}"></textarea>
+            </div>
+            <button class="ui button" type="submit">Reply</button>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        </form>
+    </div>
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

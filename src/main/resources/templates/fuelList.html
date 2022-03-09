@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Fuel list</div>
+</div>
+
+<div class="ui segment">
+    <form action="/fuelCreate">
+        <button class="ui basic button">
+            <i class="plus icon"></i>
+            Add fuel
+        </button>
+    </form>
+    <table class="ui striped table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody th:each="fuel: ${fuels}">
+        <tr>
+            <td th:text="${fuel.id}"></td>
+            <td th:text="${fuel.name}"></td>
+            <td>
+                <a th:href="@{/fuelUpdate/{id}(id=${fuel.id})}">Edit</a>
+            </td>
+            <td>
+                <a th:href="@{/fuelDelete/{id}(id=${fuel.id})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

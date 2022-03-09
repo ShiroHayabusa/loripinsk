@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Engine list</div>
+</div>
+
+<div class="ui segment">
+    <form action="/engineCreate">
+        <button class="ui basic button">
+            <i class="plus icon"></i>
+            Add engine
+        </button>
+    </form>
+    <table class="ui striped table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Volume</th>
+            <th>Power</th>
+            <th>Type</th>
+            <th>Torque</th>
+            <th>Fuel</th>
+            <th>Brand</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody th:each="engine: ${engines}">
+        <tr>
+            <td th:text="${engine.id}"></td>
+            <td th:text="${engine.name}"></td>
+            <td th:text="${engine.volume}"></td>
+            <td th:text="${engine.power}"></td>
+            <td th:if="${engine.engineType}" th:text="${engine.engineType.name}"></td>
+            <td th:text="${engine.torque}"></td>
+            <td th:if="${engine.fuel}" th:text="${engine.fuel.name}"></td>
+            <td th:text="${engine.manufacturer.name}"></td>
+            <td>
+                <a th:href="@{/engineUpdate/{id}(id=${engine.id})}">Edit</a>
+            </td>
+            <td>
+                <a th:href="@{/engineDelete/{id}(id=${engine.id})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

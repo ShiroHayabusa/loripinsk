@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/autosport">Autosport</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/autosport/{id}(id=${race.series.id})}" th:text="${race.series.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/autosport/calendar/{id}(id=${race.series.id})}">Calendar</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Edit race</div>
+</div>
+
+<div class="ui raised very padded text container segment">
+    <form class="ui form" action="#" th:action="@{/raceUpdate}" th:object="${race}" method="post">
+        <div class="field">
+            <input readonly type="hidden" name="id" th:field="*{id}">
+        </div>
+        <div class="field">
+            <input readonly type="hidden" name="series" th:field="*{series}">
+        </div>
+        <div class="field">
+            <label>Name</label>
+            <input type="text" name="name" placeholder="Name" th:field="*{name}">
+        </div>
+        <div class="field">
+            <label>Stage number</label>
+            <input type="text" name="stageNumber" placeholder="Stage number" th:field="*{stageNumber}">
+        </div>
+        <div class="field">
+            <label>Season</label>
+            <input type="text" name="season" placeholder="Season" th:field="*{season}">
+        </div>
+        <div class="field">
+            <label>Start date</label>
+            <input type="text" name="startDate" placeholder="Start date" th:field="*{startDate}">
+        </div>
+        <div class="field">
+            <label>End date</label>
+            <input type="text" name="finishDate" placeholder="End date" th:field="*{finishDate}">
+        </div>
+        <div class="field">
+            <label>Country</label>
+            <select class="ui search dropdown" id="country" th:field="*{country}">
+                <option value="0"></option>
+                <option th:each="country : ${countries}"
+                        th:value="${country.id}"
+                        th:text="${country.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field" th:if="${race.series.name != 'WRC'}">
+            <label>Track</label>
+            <select class="ui search dropdown" id="track" th:field="*{track}">
+                <option value="0"></option>
+                <option th:each="track : ${tracks}"
+                        th:value="${track.id}"
+                        th:text="${track.getName()}">
+                </option>
+            </select>
+        </div>
+        <button class="ui button" type="submit">Save</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+</div>
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

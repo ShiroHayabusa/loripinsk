@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/autosport">Autosport</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/autosport/{id}(id=${series.id})}" th:text="${series.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/autosport/calendar/{id}(id=${series.id})}">Calendar</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section" th:text="${race.name + ' results'}"></div>
+</div>
+
+
+
+<div class="ui segment">
+    <div class="ui grid">
+        <div class="three wide column">
+            <div th:insert="parts/_sidebar :: sidebar"></div>
+        </div>
+        <div class="thirteen wide column">
+
+            <div class="ui top attached tabular menu">
+                <a class="item active" data-tab="results">
+                    Results
+                </a>
+                <a class="item" data-tab="qualification" th:if="${series.name != 'WRC'}">
+                    Qualification
+                </a>
+            </div>
+            <div class="ui bottom attached segment">
+                <div style="padding-top:0px" class="ui tab basic segment active" data-tab="results">
+                    <form style="margin-left: 20px" action="/raceResultCreate" sec:authorize ="hasAuthority('ADMIN')">
+                        <button class="ui basic button">
+                            <i class="plus icon"></i>
+                            Add results
+                        </button>
+                    </form>
+                    <div class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
+                    <table class="ui small very basic table">
+                        <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Pilot</th>
+                            <th th:if="${series.name == 'WRC'}">Co-driver</th>
+                            <th>Car</th>
+                            <th>Team</th>
+                            <th th:if="${series.name == 'WRC'}">Class</th>
+                            <th>Time</th>
+                            <th th:if="${series.name == 'WRC'}">Gap</th>
+                            <th th:if="${series.name == 'Formula 1'}">Speed</th>
+                            <th th:if="${series.name == 'Formula 1'}">Pit-stops</th>
+                            <th>Out</th>
+                            <th>Очки</th>
+                            <th th:if="${series.name == 'WRC'}">Bonus</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="raceResult: ${raceResults}">
+                            <td th:text="${raceResult.position}"></td>
+                            <td>
+                                <a th:href="@{/personOpen/{id}(id=${raceResult.pilot.id})}"
+                                   th:text="${raceResult.pilot.name}"></a>
+                            </td>
+                            <td th:if="${series.name == 'WRC'}">
+                                <a th:href="@{/personOpen/{id}(id=${raceResult.navigator.id})}"
+                                   th:text="${raceResult.navigator.name}"></a>
+                            </td>
+                            <td>
+                                <a th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}
+                                      (id=${raceResult.modification.id})}"
+                                   th:text="${raceResult.modification.bodyType.generation.manufacturer.name} + ' ' +
+                         ${raceResult.modification.bodyType.generation.carmodel.name} + ' ' +
+                         ${raceResult.modification.name}">
+                                </a>
+                            </td>
+                            <td>
+                                <a th:href="@{/teamOpen/{id}(id=${raceResult.team.id})}"
+                                   th:text="${raceResult.team.name}"></a>
+                            </td>
+                            <td th:if="${series.name == 'WRC'}" th:text="${raceResult.raceClass.name}"></td>
+                            <td th:text="${raceResult.time}"></td>
+                            <td th:if="${series.name == 'Formula 1'}" th:text="${raceResult.avSpeed}"></td>
+                            <td th:if="${series.name == 'Formula 1'}" th:text="${raceResult.pitStop}"></td>
+                            <td th:if="${series.name == 'WRC'}" th:text="${raceResult.gap}"></td>
+                            <td th:text="${raceResult.out}"></td>
+                            <td th:text="${raceResult.points}"></td>
+                            <td th:if="${series.name == 'WRC'}" th:text="${raceResult.bonus}"></td>
+                            <td sec:authorize ="hasAuthority('ADMIN')">
+                                <a th:href="@{/raceResultUpdate/{id}(id=${raceResult.id})}">
+                                    <i class="edit link icon"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="padding-top:0px" class="ui tab basic segment" data-tab="qualification">
+                    <form style="margin-left: 20px" action="/qualificationCreate" sec:authorize ="hasAuthority('ADMIN')">
+                        <button class="ui basic button">
+                            <i class="plus icon"></i>
+                            Add qualification result
+                        </button>
+                    </form>
+                    <div class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
+                    <table class="ui small very basic table">
+                        <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Pilot</th>
+                            <th>Car</th>
+                            <th>Team</th>
+                            <th>Time</th>
+                            <th>Gap</th>
+                            <th>Laps</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="qualification: ${qualifications}">
+                            <td th:text="${qualification.position}"></td>
+                            <td>
+                                <a th:href="@{/personOpen/{id}(id=${qualification.pilot.id})}"
+                                   th:text="${qualification.pilot.name}"></a>
+                            </td>
+                            <td>
+                                <a th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}
+                                      (id=${qualification.modification.id})}"
+                                   th:text="${qualification.modification.bodyType.generation.manufacturer.name} + ' ' +
+                         ${qualification.modification.bodyType.generation.carmodel.name} + ' ' +
+                         ${qualification.modification.name}">
+                                </a>
+                            </td>
+                            <td>
+                                <a th:href="@{/teamOpen/{id}(id=${qualification.team.id})}"
+                                   th:text="${qualification.team.name}"></a>
+                            </td>
+                            <td th:text="${qualification.time}"></td>
+                            <td th:text="${qualification.gap}"></td>
+                            <td th:text="${qualification.laps}"></td>
+                            <td sec:authorize ="hasAuthority('ADMIN')">
+                                <a th:href="@{/qualificationUpdate/{id}(id=${qualification.id})}">
+                                    <i class="edit link icon"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+<script>
+    $(document).ready(function () {
+        $('.ui.tabular.menu .item').tab();
+    });
+
+    $('.ui.modal')
+        .modal()
+    ;
+</script>
+</body>
+</html>

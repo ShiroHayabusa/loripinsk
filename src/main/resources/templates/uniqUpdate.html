@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/catalog">Catalog</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/{id}(id=${carmodel.manufacturer.id})}"
+       th:text="${carmodel.manufacturer.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="active section" th:href="@{/catalog/manufacturer/carmodel/uniq/{id}(id=${carmodel.id})}"
+         th:text="${carmodel.name}"></a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Edit model</div>
+</div>
+
+<div class="ui raised very padded text container segment">
+    <form class="ui form" action="#" th:action="@{/uniqUpdate}" th:object="${carmodel}" method="post"
+          enctype="multipart/form-data">
+        <div class="field">
+            <input readonly type="hidden" th:field="*{id}" id="id">
+        </div>
+        <div class="field">
+            <input readonly type="hidden" th:field="*{manufacturer}" id="manufacturer">
+        </div>
+        <div class="field">
+            <label>Model</label>
+            <input type="text" th:field="*{name}" id="carmodel" placeholder="Model">
+        </div>
+        <div class="field">
+            <label>Engine</label>
+            <select class="ui search dropdown" id="engine" th:field="*{engine}">
+                <option value="0"></option>
+                <option th:each="engine : ${engines}"
+                        th:value="${engine.id}"
+                        th:text="${engine.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Transmission</label>
+            <select class="ui search dropdown" id="gearBox" th:field="*{gearBox}">
+                <option value="0"></option>
+                <option th:each="gearBox : ${gearBoxes}"
+                        th:value="${gearBox.id}"
+                        th:text="${gearBox.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Drive</label>
+            <select class="ui search dropdown" id="drive" th:field="*{drive}">
+                <option value="0"></option>
+                <option th:each="drive : ${drives}"
+                        th:value="${drive.id}"
+                        th:text="${drive.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Production</label>
+            <input type="text" th:field="*{years}" id="years" placeholder="Production">
+        </div>
+        <div class="field">
+            <label>Description</label>
+            <textarea type="text" th:field="*{description}" id="description" placeholder="Description"></textarea>
+        </div>
+        <div class="field">
+            <div class="ui slider checkbox">
+                <input type="checkbox" name="uniq" th:checked="${carmodel.uniq}">
+                <label>Unique</label>
+            </div>
+        </div>
+        <div class="field">
+            <label>Photos</label>
+            <input type="file" name="files" multiple>
+        </div>
+
+        <button class="ui button" type="submit">Save</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

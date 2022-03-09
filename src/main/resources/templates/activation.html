@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+<div class="ui raised very padded text container segment">
+    <h2>You are registered successfully!</h2>
+    <div>Activate your account using the link sent to your e-mail.</div>
+    <div th:text="${message}"></div>
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

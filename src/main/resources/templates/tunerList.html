@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Tuner list</div>
+</div>
+
+<div class="ui segment">
+    <form action="/tunerCreate">
+        <button class="ui basic button">
+            <i class="plus icon"></i>
+            Add tuner
+        </button>
+    </form>
+    <table class="ui striped table">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Logo</th>
+        </tr>
+        </thead>
+        <tbody th:each="tuner: ${tuners}">
+        <tr>
+            <td th:text="${tuner.id}"></td>
+            <td>
+                <a th:href="@{/tunerOpen/{id}(id=${tuner.id})}" th:text="${tuner.name}">
+                </a>
+            </td>
+            <td th:text="${tuner.country.name}"></td>
+            <td>
+                <img class="ui small image" th:src="@{'/img/' + ${tuner.logo}}" alt="">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

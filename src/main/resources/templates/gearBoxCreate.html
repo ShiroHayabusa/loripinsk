@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/gearBoxList">Transmission list</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Add transmission</div>
+</div>
+
+<div class="ui raised very padded text container segment">
+    <form class="ui form" action="#" th:action="@{/gearBoxCreate}" th:object="${gearBox}" method="post">
+        <div class="field">
+            <label>Name</label>
+            <input type="text" name="name" placeholder="Name" th:field="*{name}">
+        </div>
+        <div class="field">
+            <label>Type</label>
+            <select class="ui search dropdown" id="type" th:field="*{type}">
+                <option value="0"></option>
+                <option th:each="gearBoxType : ${gearBoxTypes}"
+                        th:value="${gearBoxType.id}"
+                        th:text="${gearBoxType.getName()}">
+                </option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Description</label>
+            <textarea type="text" name="description" placeholder="Description" th:field="*{description}"></textarea>
+        </div>
+        <button class="ui button" type="submit">Добавить</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+</div>
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

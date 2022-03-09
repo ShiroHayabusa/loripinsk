@@ -1,0 +1,72 @@
+  <!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.w3.org/1999/xhtml">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+  <a class="section" href="/">Home</a>
+  <i class="right angle icon divider"></i>
+  <a class="section" href="/catalog">Catalog</a>
+  <i class="right angle icon divider"></i>
+  <a class="section" th:href="@{/catalog/manufacturer/{id}(id = ${carmodel.manufacturer.id})}" th:text="${carmodel.manufacturer.name}"></a>
+  <i class="right angle icon divider"></i>
+  <div class="active section" th:text="${carmodel.name}"></div>
+</div>
+
+<h3 style="margin-left:20px; margin-right:20px" class="ui dividing header" th:text="${carmodel.manufacturer.name} +
+' ' + ${carmodel.name}">
+</h3>
+<form style="margin-left: 20px; margin-bottom: 10px" th:action="@{/carmodelUpdate/{id}(id=${carmodel.id})}"
+      sec:authorize ="hasAuthority('ADMIN')">
+  <button class="ui basic button">
+    <i class="edit icon"></i>
+    Edit
+  </button>
+</form>
+<p style="margin-left:20px; margin-right:20px" th:text="${carmodel.description}"></p>
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider"></div>
+<form style="margin-left: 20px" action="/generationCreate" sec:authorize ="hasAuthority('ADMIN')">
+  <button class="ui basic button">
+    <i class="plus icon"></i>
+    Add generation
+  </button>
+</form>
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
+
+
+<body>
+<div class="ui basic segment">
+
+  <div class="ui five cards">
+
+    <div class="card" th:each="gens: ${generations}">
+      <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id=${gens.id})}">
+        <img th:src="@{'/img/' + ${gens.photo}}">
+      </a>
+      <div class="content">
+        <a class="header" th:text="${gens.name}" th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id=${gens.id})}"></a>
+        <div class="meta">
+          <a th:text="${gens.years}"></a>
+        </div>
+        <div class="description"
+             th:if="${gens.body}"
+             th:text="${gens.body.name}">
+        </div>
+        <a th:href="@{/manufacturer/carmodel/generation/delete/{id}(id=${gens.id})}" sec:authorize ="hasAuthority('ADMIN')">
+          Delete
+        </a>
+
+      </div>
+    </div>
+
+
+
+  </div>
+</div>
+<div class="ui divider"></div>
+<div th:insert="parts/_footer :: footer"></div>
+
+</body>
+
+</html>

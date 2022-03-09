@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<style>
+    div.block{
+        display:inline-block;
+        max-width: 100%;
+        height: auto;
+        padding-left: 10px;
+    }
+</style>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/catalog">Catalog</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/{id}(id =${bodyType.generation.manufacturer.id})}"
+       th:text="${bodyType.generation.manufacturer.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/carmodel/{id}(id = ${bodyType.generation.carmodel.id})}"
+       th:text="${bodyType.generation.carmodel.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id = ${bodyType.generation.id})}"
+       th:text="${bodyType.generation.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:if="${bodyType.restyle}"
+       th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id = ${bodyType.generation.id})}"
+       th:text="${bodyType.restyle.name}"></a>
+    <i class="right angle icon divider" th:if="${bodyType.restyle}"></i>
+    <div class="active section" th:text="${bodyType.bodyTypeName.name}"></div>
+</div>
+
+<h3 style="margin-left:20px; margin-right:20px" class="ui dividing header"
+    th:if="${bodyType.restyle}"
+    th:text="${bodyType.generation.manufacturer.name} + ' ' + ${bodyType.generation.carmodel.name} + ' ' +
+             ${bodyType.generation.name} + ' ' + ${bodyType.restyle.name} + ' ' + ${bodyType.bodyTypeName.name}">
+</h3>
+<h3 style="margin-left:20px; margin-right:20px" class="ui dividing header"
+    th:if="${bodyType.restyle == null}"
+    th:text="${bodyType.generation.manufacturer.name} + ' ' + ${bodyType.generation.carmodel.name} + ' ' +
+             ${bodyType.generation.name} + ' ' + ${bodyType.bodyTypeName.name}">
+</h3>
+<form style="margin-left: 20px; margin-bottom: 10px" th:action="@{/restyleUpdate/{id}(id=${bodyType.id})}"
+      sec:authorize ="hasAuthority('ADMIN')">
+    <button class="ui basic button">
+        <i class="edit icon"></i>
+        Edit
+    </button>
+</form>
+<p style="margin-left:20px; margin-right:20px" th:text="${bodyType.description}"></p>
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider"></div>
+<form style="margin-left: 20px" action="/modificationCreate" sec:authorize ="hasAuthority('ADMIN')">
+    <button class="ui basic button">
+        <i class="plus icon"></i>
+        Add car
+    </button>
+</form>
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
+
+<body>
+<div style="margin-left:20px; margin-right:20px" class="ui segment">
+    <div class="ui divided items">
+        <div class="item" th:each="modification: ${modifications}" th:if="${modification.tuner == null}">
+            <div class="image">
+                <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
+                    <img class="ui small image" th:src="@{'/img/' + ${modification.photo}}">
+                </a>
+            </div>
+            <div class="content">
+                <a class="header" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}"
+                   th:text="${modification.name}"></a>
+                <div class="meta">
+                    <span class="cinema" th:text="${modification.years}"></span>
+                </div>
+                <div class="description">
+                    <p ></p>
+                </div>
+                <div class="extra">
+                    <div class="ui label" th:if="${modification.body}" th:text="${modification.body.name}"></div>
+                    <div class="ui label" th:if="${modification.engine}" th:text="${modification.engine.name}"></div>
+                    <div class="ui label" th:if="${modification.spec}" th:text="${modification.spec.name}"></div>
+                </div>
+                <div class="description" sec:authorize ="hasAuthority('ADMIN')">
+                    <a th:href="@{/restyles/car/modification/delete/{id}(id=${modification.id})}">Delete</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div style="margin-left:20px; margin-right:20px" class="ui segment" th:if="${counter > 0}">
+    <h3 class="ui dividing header">
+        Tuning
+    </h3>
+    <div class="ui divided items">
+        <div class="item" th:each="modification: ${modifications}" th:if="${modification.tuner}">
+            <div class="image">
+                <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
+                    <img class="ui small image" th:src="@{'/img/' + ${modification.photo}}">
+                </a>
+            </div>
+            <div class="content">
+                <a class="header" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}"
+                   th:text="${modification.name}"></a>
+                <div class="meta">
+                    <span class="cinema" th:text="${modification.years}"></span>
+                </div>
+                <div class="description">
+                    <p ></p>
+                </div>
+                <div class="extra">
+                    <div class="ui label" th:if="${modification.tuner}" th:text="${modification.tuner.name}"></div>
+                    <div class="ui label" th:if="${modification.body}" th:text="${modification.body.name}"></div>
+                    <div class="ui label" th:if="${modification.engine}" th:text="${modification.engine.name}"></div>
+                </div>
+                <div class="description" sec:authorize ="hasAuthority('ADMIN')">
+                    <a th:href="@{/restyles/car/modification/delete/{id}(id=${modification.id})}">Удалить</a>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+
+</body>
+</html>

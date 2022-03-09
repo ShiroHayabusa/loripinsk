@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">User list</div>
+</div>
+
+<div class="ui raised very padded text container segment">
+<h2>User list</h2>
+<table class="ui very basic table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr th:each="u: ${users}">
+            <td th:text="${u.username}"></td>
+            <td th:text="${u.roles}"></td>
+            <td><a th:href="@{user/{id}(id=${u.id})}">Edit</a></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

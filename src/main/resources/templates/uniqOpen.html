@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<style>
+  div.block{
+    display:inline-block;
+    max-width: 100%;
+    height: auto;
+    padding-left: 10px;
+  }
+</style>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+  <a class="section" href="/">Home</a>
+  <i class="right angle icon divider"></i>
+  <a class="section" href="/catalog">Catalog</a>
+  <i class="right angle icon divider"></i>
+  <a class="section" th:href="@{/catalog/manufacturer/{id}(id=${carmodel.manufacturer.id})}"
+                              th:text="${carmodel.manufacturer.name}"></a>
+  <i class="right angle icon divider"></i>
+  <div class="active section" th:text="${carmodel.name}"></div>
+</div>
+
+<h3 style="margin-left:20px; margin-right:20px" class="ui dividing header" th:text="${carmodel.manufacturer.name} + ' ' + ${carmodel.name}">
+</h3>
+<form style="margin-left: 20px" th:action="@{/uniqUpdate/{id}(id=${carmodel.id})}" sec:authorize ="hasAuthority('ADMIN')">
+  <button class="ui basic button">
+    <i class="edit icon"></i>
+    Edit
+  </button>
+</form>
+<a style="margin-left: 20px" th:href="@{/catalog/manufacturer/carmodel/uniq/delete/{id}(id=${carmodel.id})}">Delete</a>
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
+
+
+<body>
+<div style="margin-left:8px" class="ui internally celled grid">
+  <div class="row">
+
+    <div class="six wide column">
+      <p th:text="${carmodel.description}"></p>
+      <div class="ui divider"></div>
+      <h4 class="ui header">
+        Production
+        <div class="sub header" th:text="${carmodel.years}"></div>
+      </h4>
+      <div class="ui divider"></div>
+      <div class="ui divider"></div>
+      <h4 class="ui header">
+        Engines
+        <div class="sub header" th:if="${carmodel.engine}" th:text="${carmodel.engine.name}"></div>
+      </h4>
+      <div class="ui divider"></div>
+      <h4 class="ui header">
+        Drive
+        <div class="sub header" th:if="${carmodel.drive}" th:text="${carmodel.drive.name}"></div>
+      </h4>
+
+      <div class="ui divider"></div>
+      <!--        <h4 class="ui header">
+                Titles
+                <div class="sub header">-</div>
+              </h4>
+              <div class="ui divider"></div>
+              <h4 class="ui header">
+                Tags
+                <div class="sub header">
+                  <a class="ui tag label"></a>
+                  <a class="ui tag label"></a>
+                  <a class="ui tag label"></a>
+                  <a class="ui tag label"></a>
+                </div>
+              </h4> !-->
+    </div>
+
+    <div class="ten wide column">
+      <div style="margin-right:0px" class="ui grid">
+
+        <div class="thirteen wide stretched column">
+          <div style="padding-top:0px" class="ui tab basic segment active" data-tab="photo">
+            <div class="block ui small images " th:each="photo: ${carmodel.photos}">
+              <div>
+                <a th:href="${'/img/' + photo}" data-fancybox="gallery">
+                  <img th:src="${'/img/' + photo}">
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="padding-top:0px" class="ui tab basic segment" data-tab="video">
+            <h4 class="ui header">
+            </h4>
+            <a data-fancybox href="">
+              <img src="">
+            </a>
+            <a data-fancybox href="">
+              <img src="">
+            </a>
+            <a data-fancybox href="">
+              <img src="">
+            </a>
+          </div>
+
+          <div style="padding-top:0px" class="ui tab basic segment" data-tab="spots">
+
+          </div>
+
+        </div>
+
+        <div class="three wide column">
+          <div class="ui vertical fluid right tabular menu">
+            <a class="item active" data-tab="photo">
+              Photo
+            </a>
+            <a class="item" data-tab="video">
+              Video
+            </a>
+            <a class="item" data-tab="spots">
+              Spots
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div th:insert="parts/_footer :: footer"></div>
+
+<script>
+  $(document).ready(function () {
+    $('.ui.tabular.menu .item').tab();
+  });
+
+  $('.ui.modal')
+          .modal()
+  ;
+
+  $(function(){
+    $("#open").click(function(){
+      $(".open").modal('show');
+    });
+    $(".open").modal({
+      closable: true
+    });
+  });
+
+</script>
+
+</body>
+</html>

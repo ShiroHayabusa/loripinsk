@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<style>
+    div.block{
+        display:inline-block;
+        max-width: 100%;
+        height: auto;
+        padding-left: 10px;
+    }
+</style>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/autosport">Autosport</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/autosport/{id}(id=${person.series.id})}" th:text="${person.series.name}"></a>
+    <i class="right angle icon divider"></i>
+    <a class="section" th:href="@{/autosport/persons/{id}(id=${person.series.id})}">Persons</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section" th:text="${person.name}"></div>
+</div>
+
+<h3 style="margin-left:20px; margin-right:20px" class="ui dividing header" th:text="${person.name}">
+</h3>
+<form style="margin-left: 20px" th:action="@{/personUpdate/{id}(id=${person.id})}" sec:authorize ="hasAuthority('ADMIN')">
+    <button class="ui basic button">
+        <i class="edit icon"></i>
+        Edit
+    </button>
+</form>
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
+
+
+<body>
+<div style="margin-left: 6px; margin-bottom: 10px" class="ui grid">
+    <div class="four wide column">
+        <img class="ui medium image" th:src="${'/img/' + person.photo}">
+    </div>
+    <div class="eight wide column">
+        <span>Date of birth: </span>
+        <span th:text="${person.dateOfBirth}"></span>
+        <p></p>
+        <span>Country: </span>
+        <span th:if="${person.country}" th:text="${person.country.name}"></span>
+        <p></p>
+        <span>Series: </span>
+        <span th:text="${person.series.name}"></span>
+        <p></p>
+        <span th:text="${person.description}"></span>
+    </div>
+    <div class="four wide column">
+        <h3 style="margin-right: 20px" class="ui dividing header">
+            Team
+        </h3>
+        <div class="ui card" th:if="${person.team}">
+            <a class="image" th:href="@{/teamOpen/{id}(id=${person.team.id})}">
+                <img th:if="${person.team.logo}" th:src="${'/img/' + person.team.logo}">
+            </a>
+            <div class="content">
+                <a class="description" th:href="@{/teamOpen/{id}(id=${person.team.id})}"
+                   th:text="${person.team.name}"></a>
+            </div>
+        </div>
+        <p></p>
+    </div>
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

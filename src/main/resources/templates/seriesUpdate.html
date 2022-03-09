@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      sec:authorize="hasAuthority('ADMIN')">
+
+<div th:insert="parts/_header :: header"></div>
+<div th:insert="parts/_menu :: menu"></div>
+
+<body>
+
+<div style="margin-left:20px" class="ui mini breadcrumb">
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/adminPage">Administration</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/seriesList">Series list</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section">Edit series</div>
+</div>
+
+<div class="ui raised very padded text container segment">
+    <form class="ui form" action="#" th:action="@{/seriesUpdate}" th:object="${series}" method="post"
+          enctype="multipart/form-data">
+        <div class="field">
+            <input readonly type="hidden" th:field="*{id}" id="id" placeholder="ID">
+        </div>
+        <div class="field">
+            <label>Series</label>
+            <input type="text" th:field="*{name}" id="heading" placeholder="Series">
+        </div>
+        <div class="field">
+            <label>Photo</label>
+            <img class="ui centered medium image" th:src="'/img/' + ${series.getPhoto()}" alt="">
+            <input style="margin-top:20px" type="file" name="file">
+        </div>
+
+        <button class="ui button" type="submit">Save</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    </form>
+
+</div>
+<div th:insert="parts/_footer :: footer"></div>
+</body>
+</html>

@@ -10,15 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -79,6 +75,8 @@ public class IndexController {
         this.spotService = spotService;
     }
 
+    public static Long tempId;
+
     @Value("${upload.path}")
     private String uploadPath;
 
@@ -89,84 +87,25 @@ public class IndexController {
     }
 
     @GetMapping("/")
-    public String findAll(
-            @AuthenticationPrincipal User user,
-            HttpServletRequest request,
-            @RequestParam(required = false, defaultValue = "") String filter,
-            Model model,
-            Restyle restyle
-    ) {
-        int page = 0;
-        int size = 10;
-
-        if (request.getParameter("page") != null && !request.getParameter("page").isEmpty()) {
-            page = Integer.parseInt(request.getParameter("page")) - 1;
-        }
-
-        if (request.getParameter("size") != null && !request.getParameter("size").isEmpty()) {
-            size = Integer.parseInt(request.getParameter("size"));
-        }
-
-        //model.addAttribute("articles", articleRepo.findAll(PageRequest.of(page, size)));
+    public String index(Model model) {
         List<Article> articles = articleService.findAllByOrderByIdDesc();
-
-        if (articles.size() > 1) {
-            Article lastArticle = articles.get(0);
-            Article penultArticle = articles.get(1);
-            model.addAttribute("lastArticle", lastArticle);
-            model.addAttribute("penultArticle", penultArticle);
-            articles.removeAll(articles.subList(0, 2));
-        }
-
         model.addAttribute("articles", articles);
-
-        List<SpotDto> spots = spotService.findAllByOrderByIdDesc(user);
-        model.addAttribute("spots", spots);
-
-        List<Modification> modifications = modificationService.findAllByOrderByIdDesc();
-        model.addAttribute("modifications", modifications);
-        int photoCount = 0;
-
-        for (Modification modification: modifications
-        ) {
-            photoCount = photoCount + modification.getPhotos().size();
-        }
-        model.addAttribute("photoCount", photoCount);
-
-        model.addAttribute("manufacturers", manufacturerService.findAll());
-        model.addAttribute("carmodels", carmodelService.findAll());
-
-
         return "index";
     }
 
-    @GetMapping("/articleCreate")
-    public String createArticleForm(Article article, Model model){
-        List<Modification> modifications = modificationService.findAllByOrderByIdAsc();
-        model.addAttribute("modifications", modifications);
+    @GetMapping("/articleCreate/{id}")
+    public String createArticleForm(Article article, @PathVariable("id") Long id, Model model) {
+        Modification modification = modificationService.findById(id);
+        model.addAttribute("modification", modification);
+        tempId = id;
         return "articleCreate";
     }
 
     @PostMapping("/articleCreate")
-    public String createArticle(
-            @AuthenticationPrincipal User user,
-            @Valid Article article,
-            BindingResult bindingResult,
-            Model model
-    ) throws IOException {
-        article.setAuthor(user);
+    public String createArticle(Article article, Model model) {
+        article.setModification(modificationService.findById(tempId));
         article.setDate(now());
-
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
-            model.mergeAttributes(errorsMap);
-            return "articleCreate";
-        } else {
-
-            model.addAttribute("article", null);
-
-            articleService.saveArticle(article);
-        }
+        articleService.saveArticle(article);
         return "redirect:/";
     }
 
@@ -185,6 +124,7 @@ public class IndexController {
         model.addAttribute("article", article);
         user.setTmp(id);
         userService.save(user);
+
         return "articleUpdate";
     }
 
@@ -203,14 +143,20 @@ public class IndexController {
                                   @PathVariable Long id,
                                   Comment comment,
                                   Model model) {
+
         Article article = articleService.findById(id);
         model.addAttribute("article", article);
+
         List<Comment> comments = commentService.findByArticleIdOrderByIdAsc(id);
         model.addAttribute("comments", comments);
+
         List<Reply> replies = replyService.findByArticleIdOrderByIdAsc(id);
-        model.addAttribute("replies",replies);
-        user.setTmp(id);
-        userService.save(user);
+        model.addAttribute("replies", replies);
+
+        if (user != null) {
+            user.setTmp(id);
+            userService.save(user);
+        }
         return "articleOpen";
     }
 
@@ -275,7 +221,7 @@ public class IndexController {
     }
 
     @GetMapping("/test")
-    public String test(@RequestParam Manufacturer manufacturer){
+    public String test(@RequestParam Manufacturer manufacturer) {
 
         return "test";
     }

@@ -22,8 +22,7 @@
             </button>
         </form>
 
-        <h3 class="ui dividing header" th:if="${engine.manufacturer}" th:text="'Характеристики двигателя ' +
-${engine.manufacturer.name} + ' ' + ${engine.name}">
+        <h3 class="ui dividing header" th:if="${engine.manufacturer}" th:text="${engine.manufacturer.name} + ' ' + ${engine.name} + ' ' + 'engine specifications'">
         </h3>
         <div class="ui three column stackable grid container">
             <div class="column">
@@ -38,7 +37,7 @@ ${engine.manufacturer.name} + ' ' + ${engine.name}">
                         <td th:if="${engine.engineType}" th:text="${engine.engineType.name}"></td>
                     </tr>
                     <tr>
-                        <td>Volume (l)</td>
+                        <td>Engine capacity (l)</td>
                         <td th:text="${engine.volume}"></td>
                     </tr>
                     <tr>

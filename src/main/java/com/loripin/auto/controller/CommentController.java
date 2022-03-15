@@ -26,15 +26,21 @@ public class CommentController {
     ReplyService replyService;
     private final
     CommentService commentService;
+    private final
+    ArticleService articleService;
 
     public CommentController(CommentService commentService,
                              ReplyService replyService,
-                             UserService userService, SpotService spotService, ModificationService modificationService) {
+                             UserService userService,
+                             SpotService spotService,
+                             ModificationService modificationService,
+                             ArticleService articleService) {
         this.commentService = commentService;
         this.replyService = replyService;
         this.userService = userService;
         this.spotService = spotService;
         this.modificationService = modificationService;
+        this.articleService = articleService;
     }
 
     @GetMapping("replyCreate/{id}")
@@ -50,7 +56,11 @@ public class CommentController {
         if (comment.getModification() != null) {
             user.setTmpModification(comment.getModification().getId());
         } else {
-            user.setTmpSpot(comment.getSpot().getId());
+            if (comment.getSpot() != null) {
+                user.setTmpSpot(comment.getSpot().getId());
+            } else {
+                user.setTmpArticle(comment.getArticle().getId());
+            }
         }
         userService.save(user);
 
@@ -66,7 +76,11 @@ public class CommentController {
         if (user1.getTmpModification() != null) {
             reply.setModification(modificationService.findById(user1.getTmpModification()));
         } else {
-            reply.setSpot(spotService.findById(user1.getTmpSpot()));
+            if (user1.getTmpSpot() != null) {
+                reply.setSpot(spotService.findById(user1.getTmpSpot()));
+            } else {
+                reply.setArticle(articleService.findById(user1.getTmpArticle()));
+            }
         }
 
         reply.setUser(user1);
@@ -83,7 +97,11 @@ public class CommentController {
         if (user1.getTmpModification() != null) {
             return "redirect:/catalog/manufacturer/carmodel/generation/restyle/modification/" + user1.getTmpModification();
         } else {
-            return "redirect:/spotOpen/" + user1.getTmpSpot();
+            if (user1.getTmpSpot() != null) {
+                return "redirect:/spotOpen/" + user1.getTmpSpot();
+            } else {
+                return "redirect:/articleOpen/" + user1.getTmpArticle();
+            }
         }
 
     }

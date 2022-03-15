@@ -5,6 +5,15 @@
 <div th:insert="parts/_header :: header"></div>
 <div th:insert="parts/_menu :: menu"></div>
 
+<style>
+    div.block {
+        display: inline-block;
+        max-width: 100%;
+        height: auto;
+        padding-left: 10px;
+    }
+</style>
+
 <body>
 
 <div style="margin-left:20px" class="ui mini breadcrumb">
@@ -12,55 +21,117 @@
     <i class="right angle icon divider"></i>
     <div class="active section">Add news</div>
 </div>
+<div class="ui basic segment">
+    <h3 class="ui dividing header" th:text="${modification.bodyType.generation.manufacturer.name} + ' ' +
+                                                    ${modification.bodyType.generation.carmodel.name} + ' ' +
+                                                    ${modification.name}">
+    </h3>
 
-<div class="ui raised very padded text container segment">
-    <form class="ui form" action="#" th:action="@{/articleCreate}" th:object="${article}" method="post" enctype="multipart/form-data">
 
-        <div class="field">
-            <label>Heading</label>
-            <input type="text" name="heading" placeholder="Heading" th:field="*{heading}">
-        </div>
-        <div class="ui form error" >
-            <div class="ui error message" th:if="${headingError}">
-                <div class="header">Error!</div>
-                <p th:text="${headingError}"></p>
+    <form class="ui form" action="#" th:action="@{/articleCreate}" th:object="${article}" method="post"
+          enctype="multipart/form-data">
+
+        <div class="four column stackable ui grid">
+            <div class="column">
+                <img class="ui large image" th:src="${'/img/' + modification.photo}" alt="">
+                <p></p>
+                <select class="ui dropdown" th:field="*{status}">
+                    <option value="">Status</option>
+                    <option value="New model">New model</option>
+                    <option value="New version">New version</option>
+                    <option value="New generation">New generation</option>
+                    <option value="Facelift">Facelift</option>
+                </select>
+            </div>
+            <div class="column">
+                <table class="ui very basic table">
+                    <tbody>
+                    <tr th:if="${modification.engine}">
+                        <td>Engine</td>
+                        <td th:text="${modification.engine.name}"></td>
+                    </tr>
+                    <tr th:if="${modification.gearBox}">
+                        <td>Gearbox</td>
+                        <td th:text="${modification.gearBox.name}"></td>
+                    </tr>
+                    <tr th:if="${modification.body}">
+                        <td>Body</td>
+                        <td th:text="${modification.body.name}"></td>
+                    </tr>
+                    <tr th:if="${modification.drive}">
+                        <td>Drive</td>
+                        <td th:text="${modification.drive.name}"></td>
+                    </tr>
+                    <tr th:if="${modification.maxSpeed} != ''">
+                        <td>Maxspeed</td>
+                        <td th:text="${modification.maxSpeed}"></td>
+                    </tr>
+                    <tr th:if="${modification.power} != ''">
+                        <td>Power (hp)</td>
+                        <td th:text="${modification.power}"></td>
+                    </tr>
+                    <tr th:if="${modification.torque} != ''">
+                        <td>Torque (N*m)</td>
+                        <td th:text="${modification.torque}"></td>
+                    </tr>
+                    <tr th:if="${modification.engineVolume} != ''">
+                        <td>Volume (l)</td>
+                        <td th:text="${modification.engineVolume}"></td>
+                    </tr>
+                    <tr th:if="${modification.acceleration} != ''">
+                        <td>Acceleration</td>
+                        <td th:text="${modification.acceleration}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="column">
+                <table class="ui very basic table">
+                    <tbody>
+                    <tr th:if="${modification.length} != ''">
+                        <td>Length (mm)</td>
+                        <td th:text="${modification.length}"></td>
+                    </tr>
+                    <tr th:if="${modification.height} != ''">
+                        <td>Height (mm)</td>
+                        <td th:text="${modification.height}"></td>
+                    </tr>
+                    <tr th:if="${modification.width} != ''">
+                        <td>Width (mm)</td>
+                        <td th:text="${modification.width}"></td>
+                    </tr>
+                    <tr th:if="${modification.base} != ''">
+                        <td>Wheelbase (mm)</td>
+                        <td th:text="${modification.base}"></td>
+                    </tr>
+                    <tr th:if="${modification.weight} != ''">
+                        <td>Weight (kg)</td>
+                        <td th:text="${modification.weight}"></td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
-        <div class="field">
-            <label>Text</label>
-            <textarea type="text" name="text" placeholder="Text" th:field="*{text}"></textarea>
-        </div>
-        <div class="ui form error" >
-            <div class="ui error message" th:if="${textError}">
-                <div class="header">Error!</div>
-                <p th:text="${textError}"></p>
-            </div>
-        </div>
-        <div class="field">
-            <label>Car</label>
-            <select class="ui search dropdown" id="modification" th:field="*{modification}">
-                <option value="0"></option>
-                <option th:each="modification : ${modifications}"
-                        th:value="${modification.id}"
-                        th:text="${modification.bodyType.generation.manufacturer.name} + ' ' +
-                                 ${modification.bodyType.generation.carmodel.name} + ' ' +
-                                 ${modification.name} + ' ' +
-                                 ${modification.bodyType.generation.name} ">
-                </option>
-            </select>
-        </div>
-        <div class="ui form error" >
-            <div class="ui error message" th:if="${modificationError}">
-                <div class="header">Error!</div>
-                <p th:text="${modificationError}"></p>
-            </div>
-        </div>
+        <div class="ui divider"></div>
 
-        <button class="ui button" type="submit">Add</button>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div class="block ui small images " th:each="ph: ${modification.photos}">
+            <div>
+                <a th:href="${'/img/' + ph}" data-fancybox="gallery">
+                    <img th:src="${'/img/' + ph}">
+                </a>
+            </div>
+        </div>
+        <div></div>
+        <button class="ui button" type="submit">Post</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     </form>
 </div>
 <div th:insert="parts/_footer :: footer"></div>
+<script>
+    $('.ui.dropdown')
+        .dropdown()
+    ;
+</script>
 </body>
 </html>

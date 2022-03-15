@@ -60,12 +60,27 @@
      th:if="${modification.hybrid}">Hybrid</span>
 </div>
 
-<form style="margin-left: 20px" th:action="@{/modificationUpdate/{id}(id=${modification.id})}" sec:authorize ="hasAuthority('ADMIN')">
-  <button class="ui basic button">
-    <i class="edit icon"></i>
-    Edit
-  </button>
-</form>
+<div class="ui ten column grid" sec:authorize ="hasAuthority('ADMIN')">
+    <div class="column">
+      <form style="margin-left: 20px" th:action="@{/modificationUpdate/{id}(id=${modification.id})}">
+        <button class="ui basic button">
+          <i class="edit icon"></i>
+          Edit
+        </button>
+      </form>
+    </div>
+    <div class="column">
+      <form style="margin-left: 20px" th:action="@{/articleCreate/{id}(id=${modification.id})}">
+        <button class="ui basic button">
+          <i class="plus icon"></i>
+          Create news
+        </button>
+      </form>
+    </div>
+    <div class="column"></div>
+</div>
+
+
 <div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
 
 

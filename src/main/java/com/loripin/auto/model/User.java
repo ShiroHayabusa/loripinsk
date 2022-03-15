@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private Long tmp;
     private Long tmpModification;
     private Long tmpSpot;
+    private Long tmpArticle;
     private Long tmpComment;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -167,5 +168,13 @@ public class User implements UserDetails {
 
     public void setTmpSpot(Long tmpSpot) {
         this.tmpSpot = tmpSpot;
+    }
+
+    public Long getTmpArticle() {
+        return tmpArticle;
+    }
+
+    public void setTmpArticle(Long tmpArticle) {
+        this.tmpArticle = tmpArticle;
     }
 }

@@ -5,8 +5,8 @@
 <div th:insert="parts/_menu :: menu"></div>
 
 <style>
-    div.block{
-        display:inline-block;
+    div.block {
+        display: inline-block;
         max-width: 100%;
         height: auto;
         padding-left: 10px;
@@ -14,100 +14,176 @@
 </style>
 
 <body>
+
 <div style="margin-left:20px" class="ui mini breadcrumb">
     <a class="section" href="/">Home</a>
     <i class="right angle icon divider"></i>
-    <div class="active section" th:text="${article.heading}"></div>
+    <div class="active section" th:text="${article.modification.bodyType.generation.manufacturer.name} + ' ' +
+                                                    ${article.modification.bodyType.generation.carmodel.name} + ' ' +
+                                                    ${article.modification.name}"></div>
 </div>
 
-<div class="ui container" style="margin-top:10px; margin-bottom: 10px">
-    <div class="ui segment">
-        <h2 class="ui header" th:text="${article.heading}"></h2>
-        <form style="margin-left: 20px; margin-top: 15px" th:action="@{/articleUpdate/{id}(id=${article.id})}"
-              sec:authorize ="hasAuthority('ADMIN')">
-            <button class="ui basic button">
-                <i class="edit icon"></i>
-                Edit
-            </button>
-        </form>
-        <div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
-        <p th:text="'Date: ' + ${article.date}"></p>
+<div class="ui basic segment">
+    <h3 class="ui dividing header" th:text="${article.modification.bodyType.generation.manufacturer.name} + ' ' +
+                                                    ${article.modification.bodyType.generation.carmodel.name} + ' ' +
+                                                    ${article.modification.name}">
+    </h3>
 
+    <form th:action="@{/articleDelete/{id}(id=${article.id})}" sec:authorize="hasAuthority('ADMIN')">
+        <button class="ui basic button">
+            <i class="close icon"></i>
+            Delete
+        </button>
+    </form>
 
-        <img class="ui left merged large image" th:src="@{'/img/' + ${article.modification.photo}}">
-        <div class="ui divider"></div>
-        <p th:text="${article.text}"></p>
+    <div class="ui divider" sec:authorize="hasAuthority('ADMIN')"></div>
 
-        <div class="ui divider"></div>
-        <div class="ui small header"><p>Photo</p>
-            <div class="block ui small images " th:each="ph: ${article.modification.photos}">
-                <div>
-                    <a th:href="${'/img/' + ph}" data-fancybox="gallery">
-                        <img th:src="${'/img/' + ph}" alt="" />
-                    </a>
-                </div>
-            </div>
+    <div class="four column stackable ui grid">
+        <div class="column">
+            <a th:href="${'/img/' + article.modification.photo}" data-fancybox="gallery">
+                <img class="ui large image" th:src="${'/img/' + article.modification.photo}" alt="">
+            </a>
         </div>
-
-        <div class="ui small comments" >
-            <h3 class="ui dividing header">Comments</h3>
-            <div class="comment" th:each="comment: ${comments}">
-                <a class="avatar">
-                    <img th:if="${comment.user}"
-                            th:src="@{'/img/' + ${comment.user.avatar}}">
-                </a>
-                <div class="content">
-                    <a class="author" th:if="${comment.user}"
-                       th:text="${comment.user.username}"></a>
-                    <div class="metadata">
-                        <span class="date" th:text="${comment.date}"></span>
-                        <div class="rating">
-                            <i class="star icon"></i>
-                            <span th:text="${comment.user.rating}"></span>
-                        </div>
-                    </div>
-                    <div class="text" th:text="${comment.text}">
-                    </div>
-                    <div class="actions">
-                        <a class="reply" th:href="@{/replyCreate/{id}(id=${comment.id})}" sec:authorize="isAuthenticated()">Reply</a>
-                    </div>
-                </div>
-                <div class="comments">
-                    <div class="comment" th:each="reply: ${replies}" th:if="${reply.comment.id == comment.id}">
-                        <a class="avatar">
-                            <img th:if="${reply.user}"
-                                    th:src="@{'/img/' + ${reply.user.avatar}}">
-                        </a>
-                        <div class="content">
-                            <a class="author" th:if="${reply.user}"
-                               th:text="${reply.user.username}"></a>
-                            <div class="metadata">
-                                <span class="date" th:text="${reply.date}"></span>
-                                <div class="rating">
-                                    <i class="star icon"></i>
-                                    <span th:text="${reply.user.rating}"></span>
-                                </div>
-                            </div>
-                            <div class="text" th:text="${reply.text}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <form class="ui reply form" th:action="@{/articleOpen}" th:object="${comment}"
-                  method="post" sec:authorize="isAuthenticated()">
-                <div class="field">
-                    <textarea th:field="*{text}"></textarea>
-                </div>
-                <button class="ui button" type="submit">Add</button>
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-            </form>
+        <div class="column">
+            <table class="ui very basic table">
+                <tbody>
+                <tr th:if="${article.modification.engine}">
+                    <td>Engine</td>
+                    <td>
+                        <a th:href="@{/engineOpen/{id}(id=${article.modification.engine.id})}" th:text="${article.modification.engine.name}"></a>
+                    </td>
+                </tr>
+                <tr th:if="${article.modification.engineVolume} != ''">
+                    <td>Engine capacity (l)</td>
+                    <td th:text="${article.modification.engineVolume}"></td>
+                </tr>
+                <tr th:if="${article.modification.power} != ''">
+                    <td>Power (hp)</td>
+                    <td th:text="${article.modification.power}"></td>
+                </tr>
+                <tr th:if="${article.modification.torque} != ''">
+                    <td>Torque (N*m)</td>
+                    <td th:text="${article.modification.torque}"></td>
+                </tr>
+                <tr th:if="${article.modification.gearBox}">
+                    <td>Gearbox</td>
+                    <td th:text="${article.modification.gearBox.name}"></td>
+                </tr>
+                <tr th:if="${article.modification.body}">
+                    <td>Body</td>
+                    <td th:text="${article.modification.body.name}"></td>
+                </tr>
+                <tr th:if="${article.modification.drive}">
+                    <td>Drive</td>
+                    <td th:text="${article.modification.drive.name}"></td>
+                </tr>
+                <tr th:if="${article.modification.maxSpeed} != ''">
+                    <td>Maximum speed (km/h)</td>
+                    <td th:text="${article.modification.maxSpeed}"></td>
+                </tr>
+                <tr th:if="${article.modification.acceleration} != ''">
+                    <td>Acceleration time to 100 km/h (s)</td>
+                    <td th:text="${article.modification.acceleration}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="column">
+            <table class="ui very basic table">
+                <tbody>
+                <tr th:if="${article.modification.length} != ''">
+                    <td>Length (mm)</td>
+                    <td th:text="${article.modification.length}"></td>
+                </tr>
+                <tr th:if="${article.modification.height} != ''">
+                    <td>Height (mm)</td>
+                    <td th:text="${article.modification.height}"></td>
+                </tr>
+                <tr th:if="${article.modification.width} != ''">
+                    <td>Width (mm)</td>
+                    <td th:text="${article.modification.width}"></td>
+                </tr>
+                <tr th:if="${article.modification.base} != ''">
+                    <td>Wheelbase (mm)</td>
+                    <td th:text="${article.modification.base}"></td>
+                </tr>
+                <tr th:if="${article.modification.weight} != ''">
+                    <td>Weight (kg)</td>
+                    <td th:text="${article.modification.weight}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
-</div>
 
+    <div class="ui divider"></div>
+
+    <div class="block ui small images " th:each="ph: ${article.modification.photos}">
+        <div>
+            <a th:href="${'/img/' + ph}" data-fancybox="gallery">
+                <img th:src="${'/img/' + ph}">
+            </a>
+        </div>
+    </div>
+
+    <div class="ui small comments">
+        <h3 class="ui header">Comments</h3>
+        <div class="comment" th:each="comment: ${comments}">
+            <a class="avatar">
+                <img th:if="${comment.user}"
+                     th:src="@{'/img/' + ${comment.user.avatar}}">
+            </a>
+            <div class="content">
+                <a class="author" th:if="${comment.user}"
+                   th:text="${comment.user.username}"></a>
+                <div class="metadata">
+                    <span class="date" th:text="${comment.date}"></span>
+                    <div class="rating">
+                        <i class="star icon"></i>
+                        <span th:text="${comment.user.rating}"></span>
+                    </div>
+                </div>
+                <div class="text" th:text="${comment.text}">
+                </div>
+                <div class="actions">
+                    <a class="reply" th:href="@{/replyCreate/{id}(id=${comment.id})}" sec:authorize="isAuthenticated()">Reply</a>
+                </div>
+            </div>
+            <div class="comments">
+                <div class="comment" th:each="reply: ${replies}" th:if="${reply.comment.id == comment.id}">
+                    <a class="avatar">
+                        <img th:if="${reply.user}"
+                             th:src="@{'/img/' + ${reply.user.avatar}}">
+                    </a>
+                    <div class="content">
+                        <a class="author" th:if="${reply.user}"
+                           th:text="${reply.user.username}"></a>
+                        <div class="metadata">
+                            <span class="date" th:text="${reply.date}"></span>
+                            <div class="rating">
+                                <i class="star icon"></i>
+                                <span th:text="${reply.user.rating}"></span>
+                            </div>
+                        </div>
+                        <div class="text" th:text="${reply.text}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form class="ui reply form" th:action="@{/articleOpen}" th:object="${comment}"
+              method="post" sec:authorize="isAuthenticated()">
+            <div class="field">
+                <textarea th:field="*{text}"></textarea>
+            </div>
+            <button class="ui button" type="submit">Add</button>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        </form>
+    </div>
+
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+</div>
 <div th:insert="parts/_footer :: footer"></div>
-
 </body>
 </html>

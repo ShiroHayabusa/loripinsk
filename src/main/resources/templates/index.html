@@ -16,7 +16,7 @@
     <div class="ten wide column">
         <h1 class="ui header">Latest cars</h1>
         <div class="ui divided items">
-            <div class="item" th:each="article: ${articles}">
+            <div class="item" th:each="article, iStat : ${articlePage.content}">
                 <a class="image" th:href="@{/articleOpen/{id}(id=${article.id})}">
                     <img th:src="@{'/img/' + ${article.modification.photo}}">
                 </a>
@@ -54,6 +54,17 @@
 
                 </div>
             </div>
+        </div>
+        <div th:if="${articlePage.totalPages > 0}" class="ui pagination menu"
+             th:each="pageNumber : ${pageNumbers}">
+            <a th:if="${pageNumber==articlePage.number + 1}"
+                    th:href="@{/(size=${articlePage.size}, page=${pageNumber})}" th:text="${pageNumber}"
+               class="active item">
+            </a>
+            <a th:if="${pageNumber!=articlePage.number + 1}"
+               th:href="@{/(size=${articlePage.size}, page=${pageNumber})}" th:text="${pageNumber}"
+               class="item">
+            </a>
         </div>
     </div>
     <div class="six wide column">

@@ -7,6 +7,9 @@ import com.loripin.auto.repos.FileStorage;
 import com.loripin.auto.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +20,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 
 @Controller
@@ -87,9 +92,28 @@ public class IndexController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
-        List<Article> articles = articleService.findAllByOrderByIdDesc();
-        model.addAttribute("articles", articles);
+    public String index(Model model, @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
+
+
+        final int currentPage = page.orElse(1);
+        final int pageSize = size.orElse(10);
+
+        Page<Article> articlePage = articleService.findPaginated(PageRequest.of(currentPage - 1, pageSize, Sort.by("id").ascending()));
+
+        model.addAttribute("articlePage", articlePage);
+
+        int totalPages = articlePage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+  //      List<Article> articles = articleService.findAllByOrderByIdDesc();
+  //      model.addAttribute("articles", articles);
+
+
         return "index";
     }
 

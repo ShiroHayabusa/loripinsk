@@ -4,7 +4,6 @@ import com.loripin.auto.model.*;
 import com.loripin.auto.model.dto.SpotDto;
 import com.loripin.auto.repos.FileStorage;
 import com.loripin.auto.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

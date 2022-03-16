@@ -71,8 +71,10 @@
                 </a>
             </div>
             <div class="content">
-                <a class="header" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}"
+                <a class="header" th:if="${modification.altName} == ''" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}"
                    th:text="${modification.name}"></a>
+                <a class="header" th:if="${modification.altName} != ''" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}"
+                   th:text="${modification.altName}"></a>
                 <div class="meta">
                     <span class="cinema" th:text="${modification.years}"></span>
                 </div>
@@ -106,8 +108,10 @@
                 </a>
             </div>
             <div class="content">
-                <a class="header" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}"
+                <a class="header" th:if="${modification.altName} == ''" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}"
                    th:text="${modification.name}"></a>
+                <a class="header" th:if="${modification.altName} != ''" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}"
+                   th:text="${modification.altName}"></a>
                 <div class="meta">
                     <span class="cinema" th:text="${modification.years}"></span>
                 </div>

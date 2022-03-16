@@ -16,6 +16,7 @@ public class Modification {
     private Long id;
 
     private String name;
+    private String altName;
 
     @Length(max = 10240)
     private String description;

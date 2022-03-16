@@ -98,7 +98,7 @@ public class IndexController {
         final int currentPage = page.orElse(1);
         final int pageSize = size.orElse(10);
 
-        Page<Article> articlePage = articleService.findPaginated(PageRequest.of(currentPage - 1, pageSize, Sort.by("id").ascending()));
+        Page<Article> articlePage = articleService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
 
         model.addAttribute("articlePage", articlePage);
 

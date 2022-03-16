@@ -52,7 +52,7 @@ public class ArticleService {
             list = Collections.emptyList();
         } else {
             int toIndex = Math.min(startItem + pageSize, articleRepo.findAll().size());
-            list = articleRepo.findAll().subList(startItem, toIndex);
+            list = articleRepo.findAllByOrderByIdDesc().subList(startItem, toIndex);
         }
 
         Page<Article> articlePage = new PageImpl<Article>(list, PageRequest.of(currentPage, pageSize), articleRepo.findAll().size());

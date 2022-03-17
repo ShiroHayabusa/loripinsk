@@ -162,6 +162,7 @@ public class ModificationController {
         uploadFile(modification, file1);
         modification.setPhoto(resultFilename);
 
+        modification.setAltName(null);
 
         List<String> fileNames = uploadFiles(model, files);
         modification.setPhotos(fileNames);
@@ -256,6 +257,7 @@ public class ModificationController {
         } else {
             modification.setPhoto(resultFilename);
         }
+
 
         List<String> fileNames = uploadFiles(model, files);
         if (fileNames == null) {

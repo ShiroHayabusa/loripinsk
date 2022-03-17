@@ -51,396 +51,396 @@
     <div class="active section" th:text="${modification.name}"></div>
 </div>
 
-<h3 style="margin-left:20px; margin-right:20px" class="ui dividing header" th:if="${modification.altName} == null"
+<h3 style="margin-left:20px; margin-right:20px" class="ui dividing header" th:if="${modification.altName} == null OR ${modification.altName} == ''"
     th:text="${modification.bodyType.generation.manufacturer.name} + ' ' +
                                                     ${modification.bodyType.generation.carmodel.name} + ' ' +
                                                     ${modification.name}">
 </h3>
 
-<h3 style="margin-left:20px; margin-right:20px" class="ui dividing header" th:if="${modification.altName} != null"
+<h3 style="margin-left:20px; margin-right:20px" class="ui dividing header" th:if="${modification.altName} != null AND ${modification.altName} != ''"
     th:text="${modification.bodyType.generation.manufacturer.name} + ' ' + ${modification.altName}">
 </h3>
 
-    <div style="margin-left:20px; margin-bottom: 10px" class="ui green label"
-         th:if="${modification.electric}">Electric car</span>
+<div style="margin-left:20px; margin-bottom: 10px" class="ui green label"
+     th:if="${modification.electric}">Electric car</span>
+</div>
+<div style="margin-left:20px; margin-bottom: 10px" class="ui blue label"
+     th:if="${modification.hybrid}">Hybrid</span>
+</div>
+
+<div class="ui ten column grid" sec:authorize="hasAuthority('ADMIN')">
+    <div class="column">
+        <form style="margin-left: 20px" th:action="@{/modificationUpdate/{id}(id=${modification.id})}">
+            <button class="ui basic button">
+                <i class="edit icon"></i>
+                Edit
+            </button>
+        </form>
     </div>
-    <div style="margin-left:20px; margin-bottom: 10px" class="ui blue label"
-         th:if="${modification.hybrid}">Hybrid</span>
+    <div class="column">
+        <form style="margin-left: 20px" th:action="@{/articleCreate/{id}(id=${modification.id})}">
+            <button class="ui basic button">
+                <i class="plus icon"></i>
+                Create news
+            </button>
+        </form>
     </div>
-
-    <div class="ui ten column grid" sec:authorize="hasAuthority('ADMIN')">
-        <div class="column">
-            <form style="margin-left: 20px" th:action="@{/modificationUpdate/{id}(id=${modification.id})}">
-                <button class="ui basic button">
-                    <i class="edit icon"></i>
-                    Edit
-                </button>
-            </form>
-        </div>
-        <div class="column">
-            <form style="margin-left: 20px" th:action="@{/articleCreate/{id}(id=${modification.id})}">
-                <button class="ui basic button">
-                    <i class="plus icon"></i>
-                    Create news
-                </button>
-            </form>
-        </div>
-        <div class="column"></div>
-    </div>
+    <div class="column"></div>
+</div>
 
 
-    <div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize="hasAuthority('ADMIN')"></div>
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize="hasAuthority('ADMIN')"></div>
 
 
-    <body>
-    <div style="margin-left:8px" class="ui internally celled grid">
-        <div class="row">
+<body>
+<div style="margin-left:8px" class="ui internally celled grid">
+    <div class="row">
 
-            <div class="six wide column">
-                <div class="ui grid">
-                    <div class="row">
-                        <div class="five wide column">
-                            <h4 class="ui header" th:if="${modification.years}">
-                                Production
-                                <div class="sub header" th:text="${modification.years}"></div>
-                            </h4>
-                        </div>
-                        <div class="five wide column">
-                            <h4 class="ui header" th:if="${modification.spec}">
-                                Market
-                                <div class="sub header" th:if="${modification.spec}"
-                                     th:text="${modification.spec.name}"></div>
-                            </h4>
-                        </div>
-                        <div class="six wide column">
-                            <h4 class="ui header" th:if="${modification.amount}">
-                                Amount
-                                <div class="sub header" th:text="${modification.amount}"></div>
-                            </h4>
-                        </div>
+        <div class="six wide column">
+            <div class="ui grid">
+                <div class="row">
+                    <div class="five wide column">
+                        <h4 class="ui header" th:if="${modification.years}">
+                            Production
+                            <div class="sub header" th:text="${modification.years}"></div>
+                        </h4>
                     </div>
-
-
-                    <div class="ui divider"></div>
+                    <div class="five wide column">
+                        <h4 class="ui header" th:if="${modification.spec}">
+                            Market
+                            <div class="sub header" th:if="${modification.spec}"
+                                 th:text="${modification.spec.name}"></div>
+                        </h4>
+                    </div>
+                    <div class="six wide column">
+                        <h4 class="ui header" th:if="${modification.amount}">
+                            Amount
+                            <div class="sub header" th:text="${modification.amount}"></div>
+                        </h4>
+                    </div>
                 </div>
 
-                <p th:text="${modification.description}"></p>
+
                 <div class="ui divider"></div>
-
-
-                <!--   <h4 class="ui header">
-                     Titles
-                     <div class="sub header">-</div>
-                   </h4>
-                   <div class="ui divider"></div>
-                   <h4 class="ui header">
-                     Tags
-                     <div class="sub header">
-                       <a class="ui tag label"></a>
-                       <a class="ui tag label"></a>
-                       <a class="ui tag label"></a>
-                       <a class="ui tag label"></a>
-                     </div>
-                   </h4> !-->
-
-                <div class="ui small comments">
-                    <h3 class="ui header">Comments</h3>
-                    <div class="comment" th:each="comment: ${comments}">
-                        <a class="avatar">
-                            <img th:if="${comment.user}"
-                                 th:src="@{'/img/' + ${comment.user.avatar}}">
-                        </a>
-                        <div class="content">
-                            <a class="author" th:if="${comment.user}"
-                               th:text="${comment.user.username}"></a>
-                            <div class="metadata">
-                                <span class="date" th:text="${comment.date}"></span>
-                                <div class="rating">
-                                    <i class="star icon"></i>
-                                    <span th:text="${comment.user.rating}"></span>
-                                </div>
-                            </div>
-                            <div class="text" th:text="${comment.text}">
-                            </div>
-                            <div class="actions">
-                                <a class="reply" th:href="@{/replyCreate/{id}(id=${comment.id})}"
-                                   sec:authorize="isAuthenticated()">Ответить</a>
-                            </div>
-                        </div>
-                        <div class="comments">
-                            <div class="comment" th:each="reply: ${replies}" th:if="${reply.comment.id == comment.id}">
-                                <a class="avatar">
-                                    <img th:if="${reply.user}"
-                                         th:src="@{'/img/' + ${reply.user.avatar}}">
-                                </a>
-                                <div class="content">
-                                    <a class="author" th:if="${reply.user}"
-                                       th:text="${reply.user.username}"></a>
-                                    <div class="metadata">
-                                        <span class="date" th:text="${reply.date}"></span>
-                                        <div class="rating">
-                                            <i class="star icon"></i>
-                                            <span th:text="${reply.user.rating}"></span>
-                                        </div>
-                                    </div>
-                                    <div class="text" th:text="${reply.text}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <form class="ui reply form" th:action="@{/modification}" th:object="${comment}"
-                          method="post" sec:authorize="isAuthenticated()">
-                        <div class="field">
-                            <textarea th:field="*{text}"></textarea>
-                        </div>
-                        <button class="ui button" type="submit">Add</button>
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    </form>
-                </div>
-
             </div>
 
-            <div class="ten wide column">
-                <div style="margin-right:0px" class="ui grid">
-                    <div class="twelve wide stretched column">
-                        <div style="padding-top:0px" class="ui tab basic segment active" data-tab="photo">
-                            <div style="margin-left:6px; margin-bottom: 10px">
-                                <a th:href="${'/img/' + modification.photo}" data-fancybox="gallery">
-                                    <img class="ui medium image" th:src="${'/img/' + modification.photo}" alt="">
+            <p th:text="${modification.description}"></p>
+            <div class="ui divider"></div>
+
+
+            <!--   <h4 class="ui header">
+                 Titles
+                 <div class="sub header">-</div>
+               </h4>
+               <div class="ui divider"></div>
+               <h4 class="ui header">
+                 Tags
+                 <div class="sub header">
+                   <a class="ui tag label"></a>
+                   <a class="ui tag label"></a>
+                   <a class="ui tag label"></a>
+                   <a class="ui tag label"></a>
+                 </div>
+               </h4> !-->
+
+            <div class="ui small comments">
+                <h3 class="ui header">Comments</h3>
+                <div class="comment" th:each="comment: ${comments}">
+                    <a class="avatar">
+                        <img th:if="${comment.user}"
+                             th:src="@{'/img/' + ${comment.user.avatar}}">
+                    </a>
+                    <div class="content">
+                        <a class="author" th:if="${comment.user}"
+                           th:text="${comment.user.username}"></a>
+                        <div class="metadata">
+                            <span class="date" th:text="${comment.date}"></span>
+                            <div class="rating">
+                                <i class="star icon"></i>
+                                <span th:text="${comment.user.rating}"></span>
+                            </div>
+                        </div>
+                        <div class="text" th:text="${comment.text}">
+                        </div>
+                        <div class="actions">
+                            <a class="reply" th:href="@{/replyCreate/{id}(id=${comment.id})}"
+                               sec:authorize="isAuthenticated()">Ответить</a>
+                        </div>
+                    </div>
+                    <div class="comments">
+                        <div class="comment" th:each="reply: ${replies}" th:if="${reply.comment.id == comment.id}">
+                            <a class="avatar">
+                                <img th:if="${reply.user}"
+                                     th:src="@{'/img/' + ${reply.user.avatar}}">
+                            </a>
+                            <div class="content">
+                                <a class="author" th:if="${reply.user}"
+                                   th:text="${reply.user.username}"></a>
+                                <div class="metadata">
+                                    <span class="date" th:text="${reply.date}"></span>
+                                    <div class="rating">
+                                        <i class="star icon"></i>
+                                        <span th:text="${reply.user.rating}"></span>
+                                    </div>
+                                </div>
+                                <div class="text" th:text="${reply.text}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form class="ui reply form" th:action="@{/modification}" th:object="${comment}"
+                      method="post" sec:authorize="isAuthenticated()">
+                    <div class="field">
+                        <textarea th:field="*{text}"></textarea>
+                    </div>
+                    <button class="ui button" type="submit">Add</button>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="ten wide column">
+            <div style="margin-right:0px" class="ui grid">
+                <div class="twelve wide stretched column">
+                    <div style="padding-top:0px" class="ui tab basic segment active" data-tab="photo">
+                        <div style="margin-left:6px; margin-bottom: 10px">
+                            <a th:href="${'/img/' + modification.photo}" data-fancybox="gallery">
+                                <img class="ui medium image" th:src="${'/img/' + modification.photo}" alt="">
+                            </a>
+                        </div>
+                        <div class="block ui small images " th:each="ph: ${modification.photos}">
+                            <div>
+                                <a th:href="${'/img/' + ph}" data-fancybox="gallery">
+                                    <img th:src="${'/img/' + ph}">
                                 </a>
                             </div>
-                            <div class="block ui small images " th:each="ph: ${modification.photos}">
-                                <div>
-                                    <a th:href="${'/img/' + ph}" data-fancybox="gallery">
-                                        <img th:src="${'/img/' + ph}">
-                                    </a>
-                                </div>
-                            </div>
                         </div>
+                    </div>
 
-                        <div style="padding-top:0px" class="ui tab basic segment" data-tab="spots">
-                            <div class="ui two cards">
-                                <div class="ui card" th:each="spot: ${spots}">
-                                    <div class="content">
-                                        <div class="right floated meta" th:text="${spot.date}"></div>
-                                        <img class="ui avatar image" th:if="#{spot.user}"
-                                             th:src="@{'/img/' + ${spot.user.avatar}}" th:text="${spot.user.username}">
+                    <div style="padding-top:0px" class="ui tab basic segment" data-tab="spots">
+                        <div class="ui two cards">
+                            <div class="ui card" th:each="spot: ${spots}">
+                                <div class="content">
+                                    <div class="right floated meta" th:text="${spot.date}"></div>
+                                    <img class="ui avatar image" th:if="#{spot.user}"
+                                         th:src="@{'/img/' + ${spot.user.avatar}}" th:text="${spot.user.username}">
+                                </div>
+                                <a class="image" th:href="@{/spotOpen/{id}(id=${spot.id})}">
+                                    <img th:src="@{'/img/' + ${spot.photo1}}">
+                                </a>
+                                <div class="extra content">
+                                    <div class="mini ui right labeled button" tabindex="0">
+                                        <a class="mini ui icon button" th:href="@{/spotOpen/{id}(id=${spot.id})}">
+                                            <i class="comment icon"></i>
+                                        </a>
+                                        <div class="ui basic left pointing label"
+                                             th:text="${spot.comments.size() + spot.replies.size()}">
+                                        </div>
                                     </div>
-                                    <a class="image" th:href="@{/spotOpen/{id}(id=${spot.id})}">
-                                        <img th:src="@{'/img/' + ${spot.photo1}}">
-                                    </a>
-                                    <div class="extra content">
-                                        <div class="mini ui right labeled button" tabindex="0">
-                                            <a class="mini ui icon button" th:href="@{/spotOpen/{id}(id=${spot.id})}">
-                                                <i class="comment icon"></i>
-                                            </a>
-                                            <div class="ui basic left pointing label"
-                                                 th:text="${spot.comments.size() + spot.replies.size()}">
-                                            </div>
+                                    <div class="mini right floated ui left labeled button" tabindex="0"
+                                         th:if="${spot.meLiked}" sec:authorize="isAuthenticated()">
+                                        <div class="ui basic right pointing label" th:text="${spot.likes}">
                                         </div>
-                                        <div class="mini right floated ui left labeled button" tabindex="0"
-                                             th:if="${spot.meLiked}" sec:authorize="isAuthenticated()">
-                                            <div class="ui basic right pointing label" th:text="${spot.likes}">
-                                            </div>
-                                            <a class="mini ui icon button"
-                                               th:href="@{/spot/{spot}/like(spot=${spot.id})}">
-                                                <i class="red heart icon"></i>
-                                            </a>
+                                        <a class="mini ui icon button"
+                                           th:href="@{/spot/{spot}/like(spot=${spot.id})}">
+                                            <i class="red heart icon"></i>
+                                        </a>
+                                    </div>
+                                    <div class="mini right floated ui left labeled button" tabindex="0"
+                                         th:if="${spot.meLiked}" sec:authorize="!isAuthenticated()">
+                                        <div class="ui basic right pointing label" th:text="${spot.likes}">
                                         </div>
-                                        <div class="mini right floated ui left labeled button" tabindex="0"
-                                             th:if="${spot.meLiked}" sec:authorize="!isAuthenticated()">
-                                            <div class="ui basic right pointing label" th:text="${spot.likes}">
-                                            </div>
-                                            <a class="mini ui icon button" data-content="For authorized users only!">
-                                                <i class="red heart icon"></i>
-                                            </a>
+                                        <a class="mini ui icon button" data-content="For authorized users only!">
+                                            <i class="red heart icon"></i>
+                                        </a>
+                                    </div>
+                                    <div class="mini right floated ui left labeled button" tabindex="0"
+                                         th:if="${!spot.meLiked}" sec:authorize="isAuthenticated()">
+                                        <div class="ui basic right pointing label" th:text="${spot.likes}">
                                         </div>
-                                        <div class="mini right floated ui left labeled button" tabindex="0"
-                                             th:if="${!spot.meLiked}" sec:authorize="isAuthenticated()">
-                                            <div class="ui basic right pointing label" th:text="${spot.likes}">
-                                            </div>
-                                            <a class="mini ui icon button"
-                                               th:href="@{/spot/{spot}/like(spot=${spot.id})}">
-                                                <i class="heart outline icon"></i>
-                                            </a>
+                                        <a class="mini ui icon button"
+                                           th:href="@{/spot/{spot}/like(spot=${spot.id})}">
+                                            <i class="heart outline icon"></i>
+                                        </a>
+                                    </div>
+                                    <div class="mini right floated ui left labeled button" tabindex="0"
+                                         th:if="${!spot.meLiked}" sec:authorize="!isAuthenticated()">
+                                        <div class="ui basic right pointing label" th:text="${spot.likes}">
                                         </div>
-                                        <div class="mini right floated ui left labeled button" tabindex="0"
-                                             th:if="${!spot.meLiked}" sec:authorize="!isAuthenticated()">
-                                            <div class="ui basic right pointing label" th:text="${spot.likes}">
-                                            </div>
-                                            <a class="mini ui icon button" data-content="For authorized users only!">
-                                                <i class="heart outline icon"></i>
-                                            </a>
-                                        </div>
+                                        <a class="mini ui icon button" data-content="For authorized users only!">
+                                            <i class="heart outline icon"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div style="padding-top:0px" class="ui tab basic segment" data-tab="character">
-                            <h4 class="ui header">Engine</h4>
-                            <table class="ui small selectable very basic celled table">
-                                <tbody>
-                                <tr>
-                                    <td>Model</td>
-                                    <td th:if="${modification.engine}">
-                                        <a th:href="@{/engineOpen/{id}(id=${modification.engine.id})}"
-                                           th:text="${modification.engine.name}"></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Engine type</td>
-                                    <td th:if="${modification.engineType}"
-                                        th:text="${modification.engineType.name}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Volume (l)</td>
-                                    <td th:text="${modification.engineVolume}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Power (hp)</td>
-                                    <td th:text="${modification.power}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Torque (N⋅m)</td>
-                                    <td th:text="${modification.torque}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Fuel</td>
-                                    <td th:if="${modification.fuel}" th:text="${modification.fuel.name}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                    <div style="padding-top:0px" class="ui tab basic segment" data-tab="character">
+                        <h4 class="ui header">Engine</h4>
+                        <table class="ui small selectable very basic celled table">
+                            <tbody>
+                            <tr>
+                                <td>Model</td>
+                                <td th:if="${modification.engine}">
+                                    <a th:href="@{/engineOpen/{id}(id=${modification.engine.id})}"
+                                       th:text="${modification.engine.name}"></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Engine type</td>
+                                <td th:if="${modification.engineType}"
+                                    th:text="${modification.engineType.name}"></td>
+                            </tr>
+                            <tr>
+                                <td>Volume (l)</td>
+                                <td th:text="${modification.engineVolume}"></td>
+                            </tr>
+                            <tr>
+                                <td>Power (hp)</td>
+                                <td th:text="${modification.power}"></td>
+                            </tr>
+                            <tr>
+                                <td>Torque (N⋅m)</td>
+                                <td th:text="${modification.torque}"></td>
+                            </tr>
+                            <tr>
+                                <td>Fuel</td>
+                                <td th:if="${modification.fuel}" th:text="${modification.fuel.name}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                            <h4 class="ui header">Transmission</h4>
-                            <table class="ui small selectable very basic celled table">
-                                <tbody>
-                                <tr>
-                                    <td>Transmission</td>
-                                    <td th:if="${modification.gearBox}" th:text="${modification.gearBox.name}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Transmission type</td>
-                                    <td th:if="${modification.gearBoxType}"
-                                        th:text="${modification.gearBoxType.name}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Drive</td>
-                                    <td th:if="${modification.drive}" th:text="${modification.drive.name}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <h4 class="ui header">Transmission</h4>
+                        <table class="ui small selectable very basic celled table">
+                            <tbody>
+                            <tr>
+                                <td>Transmission</td>
+                                <td th:if="${modification.gearBox}" th:text="${modification.gearBox.name}"></td>
+                            </tr>
+                            <tr>
+                                <td>Transmission type</td>
+                                <td th:if="${modification.gearBoxType}"
+                                    th:text="${modification.gearBoxType.name}"></td>
+                            </tr>
+                            <tr>
+                                <td>Drive</td>
+                                <td th:if="${modification.drive}" th:text="${modification.drive.name}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                            <h4 class="ui header">Body</h4>
-                            <table class="ui small selectable very basic celled table">
-                                <tbody>
-                                <tr>
-                                    <td>Name</td>
-                                    <td th:if="${modification.body}" th:text="${modification.body.name}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Curb weight (kg)</td>
-                                    <td th:text="${modification.weight}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Length (mm)</td>
-                                    <td th:text="${modification.length}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Width (mm)</td>
-                                    <td th:text="${modification.width}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Height (mm)</td>
-                                    <td th:text="${modification.height}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Wheelbase (mm)</td>
-                                    <td th:text="${modification.base}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <h4 class="ui header">Body</h4>
+                        <table class="ui small selectable very basic celled table">
+                            <tbody>
+                            <tr>
+                                <td>Name</td>
+                                <td th:if="${modification.body}" th:text="${modification.body.name}"></td>
+                            </tr>
+                            <tr>
+                                <td>Curb weight (kg)</td>
+                                <td th:text="${modification.weight}"></td>
+                            </tr>
+                            <tr>
+                                <td>Length (mm)</td>
+                                <td th:text="${modification.length}"></td>
+                            </tr>
+                            <tr>
+                                <td>Width (mm)</td>
+                                <td th:text="${modification.width}"></td>
+                            </tr>
+                            <tr>
+                                <td>Height (mm)</td>
+                                <td th:text="${modification.height}"></td>
+                            </tr>
+                            <tr>
+                                <td>Wheelbase (mm)</td>
+                                <td th:text="${modification.base}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                            <h4 class="ui header">Dynamic characteristics</h4>
-                            <table class="ui small selectable very basic celled table">
-                                <tbody>
-                                <tr>
-                                    <td>Maximum speed (km/h)</td>
-                                    <td th:text="${modification.maxSpeed}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Acceleration time to 100 km/h (s)</td>
-                                    <td th:text="${modification.acceleration}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
+                        <h4 class="ui header">Dynamic characteristics</h4>
+                        <table class="ui small selectable very basic celled table">
+                            <tbody>
+                            <tr>
+                                <td>Maximum speed (km/h)</td>
+                                <td th:text="${modification.maxSpeed}"></td>
+                            </tr>
+                            <tr>
+                                <td>Acceleration time to 100 km/h (s)</td>
+                                <td th:text="${modification.acceleration}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                            <h4 class="ui header" th:if="${modification.electric}
+                        <h4 class="ui header" th:if="${modification.electric}
             or ${modification.hybrid}">Electrical specifications</h4>
-                            <table class="ui small selectable very basic celled table"
-                                   th:if="${modification.electric} or ${modification.hybrid}">
-                                <tbody>
-                                <tr>
-                                    <td>Battery capacity (kW/h)</td>
-                                    <td th:text="${modification.battery}"></td>
-                                </tr>
-                                <tr>
-                                    <td>Range (km)</td>
-                                    <td th:text="${modification.range}"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-
-                        </div>
+                        <table class="ui small selectable very basic celled table"
+                               th:if="${modification.electric} or ${modification.hybrid}">
+                            <tbody>
+                            <tr>
+                                <td>Battery capacity (kW/h)</td>
+                                <td th:text="${modification.battery}"></td>
+                            </tr>
+                            <tr>
+                                <td>Range (km)</td>
+                                <td th:text="${modification.range}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
 
                     </div>
 
+                </div>
 
-                    <div class="four wide column">
-                        <div class="ui vertical fluid right tabular menu">
-                            <a class="item active" data-tab="photo">
-                                Photo
-                            </a>
-                            <a class="item" data-tab="spots">
-                                Spots
-                            </a>
-                            <a class="item" data-tab="character">
-                                Specifications
-                            </a>
-                        </div>
+
+                <div class="four wide column">
+                    <div class="ui vertical fluid right tabular menu">
+                        <a class="item active" data-tab="photo">
+                            Photo
+                        </a>
+                        <a class="item" data-tab="spots">
+                            Spots
+                        </a>
+                        <a class="item" data-tab="character">
+                            Specifications
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <div th:insert="parts/_footer :: footer"></div>
+</div>
 
-    <script>
-        $(document).ready(function () {
-            $('.ui.tabular.menu .item').tab();
+<div th:insert="parts/_footer :: footer"></div>
+
+<script>
+    $(document).ready(function () {
+        $('.ui.tabular.menu .item').tab();
+    });
+
+    $('.ui.modal')
+        .modal()
+    ;
+
+    $(function () {
+        $("#open").click(function () {
+            $(".open").modal('show');
         });
-
-        $('.ui.modal')
-            .modal()
-        ;
-
-        $(function () {
-            $("#open").click(function () {
-                $(".open").modal('show');
-            });
-            $(".open").modal({
-                closable: true
-            });
+        $(".open").modal({
+            closable: true
         });
+    });
 
-    </script>
+</script>
 
-    <script>
-        $('.button').popup();
-    </script>
+<script>
+    $('.button').popup();
+</script>
 
-    </body>
+</body>
 </html>

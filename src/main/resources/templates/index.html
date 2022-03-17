@@ -21,12 +21,15 @@
                     <img th:src="@{'/img/' + ${article.modification.photo}}">
                 </a>
                 <div class="content">
-                    <a class="header" th:href="@{/articleOpen/{id}(id=${article.id})}"
+                    <a class="header" th:if="${article.modification.altName} == null OR ${article.modification.altName} == ''"
+                       th:href="@{/articleOpen/{id}(id=${article.id})}"
                        th:text="${article.modification.bodyType.generation.manufacturer.name} + ' ' +
                                                     ${article.modification.bodyType.generation.carmodel.name} + ' ' +
                                                     ${article.modification.name}"></a>
+                    <a class="header" th:if="${article.modification.altName} != null AND ${article.modification.altName} != ''"
+                       th:href="@{/articleOpen/{id}(id=${article.id})}"
+                       th:text="${article.modification.bodyType.generation.manufacturer.name} + ' ' + ${article.modification.altName}"></a>
                     <div class="extra" th:text="${article.date}">
-                        Additional Details
                     </div>
                     <div class="meta">
                         <span></span>

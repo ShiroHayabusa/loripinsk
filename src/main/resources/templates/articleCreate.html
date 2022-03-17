@@ -22,9 +22,14 @@
     <div class="active section">Add news</div>
 </div>
 <div class="ui basic segment">
-    <h3 class="ui dividing header" th:text="${modification.bodyType.generation.manufacturer.name} + ' ' +
+    <h3 class="ui dividing header" th:if="${modification.altName} == null OR ${modification.altName} == ''"
+        th:text="${modification.bodyType.generation.manufacturer.name} + ' ' +
                                                     ${modification.bodyType.generation.carmodel.name} + ' ' +
                                                     ${modification.name}">
+    </h3>
+    <h3 class="ui dividing header" th:if="${modification.altName} != null AND ${modification.altName} != ''"
+        th:text="${modification.bodyType.generation.manufacturer.name} + ' ' +
+                                                    ${modification.altName}">
     </h3>
 
 

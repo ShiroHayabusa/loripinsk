@@ -53,6 +53,12 @@
                         <div class="ui teal label"
                              th:if="${article.status} == 'Facelift'">Facelift</span>
                         </div>
+                        <div class="ui purple label"
+                             th:if="${article.status} == 'Concept car'">Concept car</span>
+                        </div>
+                        <div class="ui violet label" th:if="${article.modification.spec}"
+                             th:text="${article.modification.spec.name}"></span>
+                        </div>
                     </div>
 
                 </div>

@@ -38,7 +38,8 @@
 
         <div class="four column stackable ui grid">
             <div class="column">
-                <img class="ui large image" th:src="${'/img/' + modification.photo}" alt="">
+                <img class="ui large image" th:src="@{'/img/' + ${modification.bodyType.generation.manufacturer.name} +
+                '/' + ${modification.bodyType.generation.carmodel.name} + '/' + ${modification.carPhoto.name}}" alt="">
                 <p></p>
                 <select class="ui dropdown" th:field="*{status}">
                     <option value="">Status</option>
@@ -121,10 +122,12 @@
 
         <div class="ui divider"></div>
 
-        <div class="block ui small images " th:each="ph: ${modification.photos}">
+        <div class="block ui small images " th:each="ph: ${modification.carPhotos}">
             <div>
-                <a th:href="${'/img/' + ph}" data-fancybox="gallery">
-                    <img th:src="${'/img/' + ph}">
+                <a th:href="@{'/img/' + ${modification.bodyType.generation.manufacturer.name} +
+                '/' + ${modification.bodyType.generation.carmodel.name} + '/' + ${ph.name}}" data-fancybox="gallery">
+                    <img th:src="@{'/img/' + ${modification.bodyType.generation.manufacturer.name} +
+                '/' + ${modification.bodyType.generation.carmodel.name} + '/' + ${ph.name}}">
                 </a>
             </div>
         </div>

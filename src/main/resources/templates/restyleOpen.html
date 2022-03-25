@@ -66,8 +66,11 @@
     <div class="ui divided items">
         <div class="item" th:each="modification: ${modifications}" th:if="${modification.tuner == null}">
             <div class="image">
-                <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-                    <img class="ui small image" th:src="@{'/img/' + ${modification.photo}}">
+                <a class="image" th:if="${modification.carPhoto}"
+                   th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
+                    <img class="ui small image" th:if="${modification.carPhoto}"
+                         th:src="@{'/img/' + ${modification.bodyType.generation.manufacturer.name} +
+                    '/' + ${modification.bodyType.generation.carmodel.name} + '/' + ${modification.carPhoto.name}}">
                 </a>
             </div>
             <div class="content">

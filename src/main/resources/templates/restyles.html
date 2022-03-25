@@ -51,7 +51,8 @@
   <div class="ui five cards">
     <div class="card" th:each="rest: ${restyles0}">
       <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}">
-        <img th:src="@{'/img/' + ${rest.photo}}">
+        <img th:if="${rest.carPhoto}"
+                th:src="@{'/img/' + ${rest.generation.manufacturer.name} + '/' + ${rest.generation.carmodel.name} + '/' + ${rest.carPhoto.name}}">
       </a>
       <div class="content">
         <a class="header"

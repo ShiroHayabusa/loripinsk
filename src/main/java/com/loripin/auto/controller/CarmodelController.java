@@ -45,6 +45,8 @@ public class CarmodelController {
     }
 
     public static List<String> existingUniqPhotos;
+    public static String manufacturerTemp;
+    public static String carModelTemp;
 
     @GetMapping("/carmodelCreate")
     public String createCarmodelForm(@AuthenticationPrincipal User user,
@@ -118,6 +120,10 @@ public class CarmodelController {
 
         List<Generation> generations = generationService.findByCarmodelIdOrderByYearsAsc(id);
         model.addAttribute("generations", generations);
+
+        manufacturerTemp = carmodel.getManufacturer().getName();
+        carModelTemp = carmodel.getName();
+
         return "generations";
     }
 

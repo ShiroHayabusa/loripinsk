@@ -3,7 +3,6 @@ package com.loripin.auto.controller;
 import com.loripin.auto.model.*;
 import com.loripin.auto.model.dto.SpotDto;
 import com.loripin.auto.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-import static com.loripin.auto.service.FileUpload.resultFilename;
+import static com.loripin.auto.service.SpotFileUpload.resultFilename;
 
 @Controller
 public class SpotController {
@@ -35,7 +34,7 @@ public class SpotController {
     private final
     ModificationService modificationService;
     private final
-    FileUpload fileUpload;
+    SpotFileUpload spotFileUpload;
     private final
     CountryService countryService;
     private final
@@ -43,7 +42,7 @@ public class SpotController {
 
     public SpotController(SpotService spotService,
                           CountryService countryService,
-                          FileUpload fileUpload,
+                          SpotFileUpload fileUpload,
                           ModificationService modificationService,
                           UserService userService,
                           CommentService commentService,
@@ -52,7 +51,7 @@ public class SpotController {
                           CarmodelService carmodelService) {
         this.spotService = spotService;
         this.countryService = countryService;
-        this.fileUpload = fileUpload;
+        this.spotFileUpload = fileUpload;
         this.modificationService = modificationService;
         this.userService = userService;
         this.commentService = commentService;
@@ -99,17 +98,17 @@ public class SpotController {
                              @RequestParam("file2") MultipartFile file2,
                              @RequestParam("file3") MultipartFile file3
     ) throws IOException {
-        fileUpload.uploadFile(spot, file1);
+        spotFileUpload.uploadFile(spot, file1);
         if (resultFilename != "empty") {
             spot.setPhoto1(resultFilename);
         }
 
-        fileUpload.uploadFile(spot, file2);
+        spotFileUpload.uploadFile(spot, file2);
         if (resultFilename != "empty") {
             spot.setPhoto2(resultFilename);
         }
 
-        fileUpload.uploadFile(spot, file3);
+        spotFileUpload.uploadFile(spot, file3);
         if (resultFilename != "empty") {
             spot.setPhoto3(resultFilename);
         }

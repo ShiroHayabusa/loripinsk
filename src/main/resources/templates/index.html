@@ -18,7 +18,8 @@
         <div class="ui divided items">
             <div class="item" th:each="article, iStat : ${articlePage.content}">
                 <a class="image" th:href="@{/articleOpen/{id}(id=${article.id})}">
-                    <img th:src="@{'/img/' + ${article.modification.photo}}">
+                    <img th:if="${article.modification.carPhoto}" th:src="@{'/img/' + ${article.modification.bodyType.generation.manufacturer.name} + '/'
+                    + ${article.modification.bodyType.generation.carmodel.name} + '/' + ${article.modification.carPhoto.name}}">
                 </a>
                 <div class="content">
                     <a class="header" th:if="${article.modification.altName} == null OR ${article.modification.altName} == ''"

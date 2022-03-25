@@ -19,6 +19,9 @@ public class BodyType {
     @JoinColumn(name = "restyle_name")
     private Restyle restyle;
     private String photo;
+    @ManyToOne
+    @JoinColumn(name = "carphoto_id")
+    private Photo carPhoto;
     private String years;
     @Length(max = 10240)
     private String description;

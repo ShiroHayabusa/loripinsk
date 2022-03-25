@@ -5,6 +5,7 @@ import com.loripin.auto.model.BodyType;
 import com.loripin.auto.model.Generation;
 import com.loripin.auto.model.User;
 import com.loripin.auto.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,10 @@ import static com.loripin.auto.controller.ModificationController.existingPhoto;
 @Controller
 public class GenerationController {
     private final
+    FileStorageImpl fileStorageImpl;
+    private final
+    FileUpload fileUpload;
+    private final
     CarmodelService carmodelService;
     private final
     UserService userService;
@@ -39,12 +44,14 @@ public class GenerationController {
                                 BodyService bodyService,
                                 BodyTypeService bodyTypeService,
                                 UserService userService,
-                                CarmodelService carmodelService) {
+                                CarmodelService carmodelService, FileUpload fileUpload, FileStorageImpl fileStorageImpl) {
         this.generationService = generationService;
         this.bodyService = bodyService;
         this.bodyTypeService = bodyTypeService;
         this.userService = userService;
         this.carmodelService = carmodelService;
+        this.fileUpload = fileUpload;
+        this.fileStorageImpl = fileStorageImpl;
     }
 
     @Value("${upload.path}")
@@ -68,20 +75,20 @@ public class GenerationController {
                                    Generation generation,
                                    @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
+        File uploadDir1 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp);
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp +
+                "/" + CarmodelController.carModelTemp);
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            generation.setPhoto(resultFilename);
+        if (!uploadDir1.exists()) {
+            uploadDir1.mkdir();
         }
+
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
+        }
+
+        generation.setCarPhoto(fileUpload.fileUpload(file));
 
         User user1 = userService.findById(user.getId());
 

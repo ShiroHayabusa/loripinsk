@@ -42,7 +42,8 @@
 
     <div class="card" th:each="gens: ${generations}">
       <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id=${gens.id})}">
-        <img th:src="@{'/img/' + ${gens.photo}}">
+        <img th:if="${gens.carPhoto}"
+                th:src="@{'/img/' + ${gens.manufacturer.name} + '/' + ${gens.carmodel.name} + '/' + ${gens.carPhoto.name}}">
       </a>
       <div class="content">
         <a class="header" th:text="${gens.name}" th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id=${gens.id})}"></a>

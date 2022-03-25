@@ -4,6 +4,7 @@ import com.loripin.auto.model.*;
 import com.loripin.auto.model.dto.SpotDto;
 import com.loripin.auto.repos.FileStorage;
 import com.loripin.auto.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,10 @@ import static com.loripin.auto.controller.SpotController.dateAndTime;
 
 @Controller
 public class ModificationController {
+    private final
+    FileUpload fileUpload;
+    private final
+    FileStorageImpl fileStorageImpl;
     private final
     ReplyService replyService;
     private final
@@ -76,7 +81,7 @@ public class ModificationController {
                                   GearBoxTypeService gearBoxTypeService,
                                   SpecService specService,
                                   CommentService commentService,
-                                  ReplyService replyService) {
+                                  ReplyService replyService, FileStorageImpl fileStorageImpl, FileUpload fileUpload) {
         this.modificationService = modificationService;
         this.fileStorage = fileStorage;
         this.engineService = engineService;
@@ -94,6 +99,8 @@ public class ModificationController {
         this.specService = specService;
         this.commentService = commentService;
         this.replyService = replyService;
+        this.fileStorageImpl = fileStorageImpl;
+        this.fileUpload = fileUpload;
     }
 
     @Value("${upload.path}")
@@ -159,17 +166,27 @@ public class ModificationController {
                                      @RequestParam("files") MultipartFile[] files
     ) throws IOException {
 
-        uploadFile(modification, file1);
-        modification.setPhoto(resultFilename);
+        File uploadDir1 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp);
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp +
+                "/" + CarmodelController.carModelTemp);
 
-        modification.setAltName(null);
+        if (!uploadDir1.exists()) {
+            uploadDir1.mkdir();
+        }
 
-        List<String> fileNames = uploadFiles(model, files);
-        modification.setPhotos(fileNames);
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
+        }
+
+        modification.setCarPhoto(fileUpload.fileUpload(file1));
+
+        List<Photo> photos = fileUpload.multiFilesUpload(files);
+        modification.setCarPhotos(photos);
 
         User user1 = userService.findById(user.getId());
 
         modification.setBodyType(bodyTypeService.findById(user1.getTmp()));
+        modification.setAltName(null);
         modificationService.saveModification(modification);
         return "redirect:/catalog/manufacturer/carmodel/generation/restyle/" + user1.getTmp();
     }

@@ -25,6 +25,9 @@ public class Generation {
     private Body body;
     private String photo;
     @ManyToOne
+    @JoinColumn(name = "carphoto_id")
+    private Photo carPhoto;
+    @ManyToOne
     @JoinColumn(name = "title_id")
     private Title title;
     @Length(max = 10240)

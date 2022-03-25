@@ -2,6 +2,7 @@ package com.loripin.auto.controller;
 
 import com.loripin.auto.model.*;
 import com.loripin.auto.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,10 @@ import java.util.UUID;
 @Controller
 public class BodyTypeController {
     private final
+    FileUpload fileUpload;
+    private final
+    FileStorageImpl fileStorageImpl;
+    private final
     UserService userService;
     private final
     SpecService specService;
@@ -37,13 +42,15 @@ public class BodyTypeController {
                               GenerationService generationService,
                               BodyTypeNameService bodyTypeNameService,
                               SpecService specService,
-                              UserService userService) {
+                              UserService userService, FileStorageImpl fileStorageImpl, FileUpload fileUpload) {
         this.bodyTypeService = bodyTypeService;
         this.restyleService = restyleService;
         this.generationService = generationService;
         this.bodyTypeNameService = bodyTypeNameService;
         this.specService = specService;
         this.userService = userService;
+        this.fileStorageImpl = fileStorageImpl;
+        this.fileUpload = fileUpload;
     }
 
     @Value("${upload.path}")
@@ -86,20 +93,20 @@ public class BodyTypeController {
                                  BodyType bodyType,
                                  @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
+        File uploadDir1 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp);
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp +
+                "/" + CarmodelController.carModelTemp);
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            bodyType.setPhoto(resultFilename);
+        if (!uploadDir1.exists()) {
+            uploadDir1.mkdir();
         }
+
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
+        }
+
+        bodyType.setCarPhoto(fileUpload.fileUpload(file));
 
         User user1 = userService.findById(user.getId());
 

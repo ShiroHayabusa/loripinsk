@@ -136,6 +136,7 @@ public class RestyleController {
             user.setTmp(bodyType.getId());
             userService.save(user);
         }
+
         return "restyleOpen";
     }
 }

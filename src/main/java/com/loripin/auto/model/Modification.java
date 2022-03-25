@@ -112,4 +112,12 @@ public class Modification {
     @OneToMany(mappedBy = "modification")
     @ToString.Exclude
     private List<Reply> replies;
+
+    @ManyToOne
+    @JoinColumn(name = "carphoto_id")
+    private Photo carPhoto;
+
+    @OneToMany
+    @CollectionTable(name = "carphotos")
+    private List<Photo> carPhotos;
 }

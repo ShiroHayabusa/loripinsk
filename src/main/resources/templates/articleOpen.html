@@ -47,8 +47,10 @@
 
     <div class="four column stackable ui grid">
         <div class="column">
-            <a th:href="${'/img/' + article.modification.photo}" data-fancybox="gallery">
-                <img class="ui large image" th:src="${'/img/' + article.modification.photo}" alt="">
+            <a th:if="${article.modification.carPhoto}" th:href="${'/img/' + article.modification.bodyType.generation.manufacturer.name + '/'
+                + article.modification.bodyType.generation.carmodel.name + '/' + article.modification.carPhoto.name}" data-fancybox="gallery">
+                <img class="ui large image" th:src="${'/img/' + article.modification.bodyType.generation.manufacturer.name + '/'
+                + article.modification.bodyType.generation.carmodel.name + '/' + article.modification.carPhoto.name}" alt="">
             </a>
         </div>
         <div class="column">
@@ -126,10 +128,12 @@
 
     <div class="ui divider"></div>
 
-    <div class="block ui small images " th:each="ph: ${article.modification.photos}">
+    <div class="block ui small images " th:each="ph: ${article.modification.carPhotos}">
         <div>
-            <a th:href="${'/img/' + ph}" data-fancybox="gallery">
-                <img th:src="${'/img/' + ph}">
+            <a th:href="${'/img/' + article.modification.bodyType.generation.manufacturer.name + '/'
+                + article.modification.bodyType.generation.carmodel.name + '/' + ph.name}" data-fancybox="gallery">
+                <img th:src="${'/img/' + article.modification.bodyType.generation.manufacturer.name + '/'
+                + article.modification.bodyType.generation.carmodel.name + '/' + ph.name}">
             </a>
         </div>
     </div>

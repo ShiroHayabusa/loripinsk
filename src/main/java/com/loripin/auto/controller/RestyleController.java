@@ -23,6 +23,10 @@ import static com.loripin.auto.controller.ModificationController.existingPhoto;
 @Controller
 public class RestyleController {
     private final
+    FileStorageImpl fileStorageImpl;
+    private final
+    FileUpload fileUpload;
+    private final
     GenerationService generationService;
     private final
     UserService userService;
@@ -41,7 +45,7 @@ public class RestyleController {
                              ModificationService modificationService,
                              BodyTypeService bodyTypeService,
                              BodyTypeNameService bodyTypeNameService,
-                             SpecService specService, UserService userService, GenerationService generationService) {
+                             SpecService specService, UserService userService, GenerationService generationService, FileUpload fileUpload, FileStorageImpl fileStorageImpl) {
         this.restyleService = restyleService;
         this.modificationService = modificationService;
         this.bodyTypeService = bodyTypeService;
@@ -49,6 +53,8 @@ public class RestyleController {
         this.specService = specService;
         this.userService = userService;
         this.generationService = generationService;
+        this.fileUpload = fileUpload;
+        this.fileStorageImpl = fileStorageImpl;
     }
 
     @Value("${upload.path}")
@@ -81,7 +87,7 @@ public class RestyleController {
         model.addAttribute("bodyTypeNames", bodyTypeNames);
         BodyType bodyType = bodyTypeService.findById(id);
         model.addAttribute("bodyType", bodyType);
-        existingPhoto = bodyType.getPhoto();
+        existingPhoto = bodyType.getCarPhoto();
         user.setTmp(bodyType.getId());
         userService.save(user);
         List<Spec> specs = specService.findAllByOrderByName();
@@ -94,24 +100,16 @@ public class RestyleController {
                                 BodyType bodyType,
                                 @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp +
+                "/" + CarmodelController.carModelTemp);
 
             if (file.isEmpty()) {
-                bodyType.setPhoto(existingPhoto);
+                bodyType.setCarPhoto(existingPhoto);
             } else {
-                bodyType.setPhoto(resultFilename);
+                bodyType.setCarPhoto(fileUpload.fileUpload(file));
             }
-        }
+
         bodyTypeService.save(bodyType);
         User user1 = userService.findById(user.getId());
         return "redirect:/catalog/manufacturer/carmodel/generation/restyle/" + user1.getTmp();

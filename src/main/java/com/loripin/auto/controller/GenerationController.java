@@ -60,7 +60,7 @@ public class GenerationController {
     @GetMapping("/generationCreate")
     public String createGenerationForm(@AuthenticationPrincipal User user,
                                        Generation generation,
-                                       Model model){
+                                       Model model) {
         List<Body> bodies = bodyService.findAllByOrderByNameAsc();
         model.addAttribute("bodies", bodies);
 
@@ -101,14 +101,14 @@ public class GenerationController {
     @GetMapping("/generationUpdate/{id}")
     public String generationUpdateForm(@AuthenticationPrincipal User user,
                                        @PathVariable Long id,
-                                       Model model){
+                                       Model model) {
         List<Body> bodies = bodyService.findAllByOrderByNameAsc();
         model.addAttribute("bodies", bodies);
         Generation generation = generationService.findById(id);
         model.addAttribute("generation", generation);
         user.setTmp(id);
         userService.save(user);
-        existingPhoto = generation.getPhoto();
+        existingPhoto = generation.getCarPhoto();
         return "generationUpdate";
     }
 
@@ -117,24 +117,13 @@ public class GenerationController {
                                    Generation generation,
                                    @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            if (file.isEmpty()) {
-                generation.setPhoto(existingPhoto);
-            } else {
-                generation.setPhoto(resultFilename);
-            }
+        if (file.isEmpty()) {
+            generation.setCarPhoto(existingPhoto);
+        } else {
+            generation.setCarPhoto(fileUpload.fileUpload(file));
         }
+
         generationService.saveGeneration(generation);
 
         User user1 = userService.findById(user.getId());

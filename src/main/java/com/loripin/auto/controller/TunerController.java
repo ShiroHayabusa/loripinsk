@@ -3,9 +3,7 @@ package com.loripin.auto.controller;
 import com.loripin.auto.model.Country;
 import com.loripin.auto.model.Tuner;
 import com.loripin.auto.model.User;
-import com.loripin.auto.service.CountryService;
-import com.loripin.auto.service.TunerService;
-import com.loripin.auto.service.UserService;
+import com.loripin.auto.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,16 +25,22 @@ import static com.loripin.auto.controller.ModificationController.existingPhoto;
 @Controller
 public class TunerController {
     private final
+    FileStorageImpl fileStorageImpl;
+    private final
+    FileUpload fileUpload;
+    private final
     UserService userService;
     private final
     CountryService countryService;
     private final
     TunerService tunerService;
 
-    public TunerController(TunerService tunerService, CountryService countryService, UserService userService) {
+    public TunerController(TunerService tunerService, CountryService countryService, UserService userService, FileUpload fileUpload, FileStorageImpl fileStorageImpl) {
         this.tunerService = tunerService;
         this.countryService = countryService;
         this.userService = userService;
+        this.fileUpload = fileUpload;
+        this.fileStorageImpl = fileStorageImpl;
     }
 
     @Value("${upload.path}")
@@ -49,7 +53,7 @@ public class TunerController {
     }
 
     @GetMapping("/tunerCreate")
-    public String createTunerForm(Tuner tuner, Model model){
+    public String createTunerForm(Tuner tuner, Model model) {
         List<Country> countries = countryService.findAllByOrderByName();
         model.addAttribute("countries", countries);
         return "tunerCreate";
@@ -59,20 +63,15 @@ public class TunerController {
     public String createTuner(Tuner tuner,
                               @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + tuner.getName());
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            tuner.setLogo(resultFilename);
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
         }
+
+        tuner.setTunerLogo(fileUpload.fileUpload(file));
+
         tunerService.save(tuner);
         return "redirect:/tunerList";
     }
@@ -80,13 +79,13 @@ public class TunerController {
     @GetMapping("/tunerUpdate/{id}")
     public String updateTunerForm(@AuthenticationPrincipal User user,
                                   @PathVariable Long id,
-                                  Model model){
+                                  Model model) {
 
         Tuner tuner = tunerService.findById(id);
         model.addAttribute("tuner", tuner);
         user.setTmp(tuner.getId());
         userService.save(user);
-        existingPhoto = tuner.getLogo();
+        existingPhoto = tuner.getTunerLogo();
         List<Country> countries = countryService.findAllByOrderByName();
         model.addAttribute("countries", countries);
         return "tunerUpdate";
@@ -97,24 +96,13 @@ public class TunerController {
                               Tuner tuner,
                               @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            if (file.isEmpty()) {
-                tuner.setLogo(existingPhoto);
-            } else {
-                tuner.setLogo(resultFilename);
-            }
+        if (file.isEmpty()) {
+            tuner.setTunerLogo(existingPhoto);
+        } else {
+            tuner.setTunerLogo(fileUpload.fileUpload(file));
         }
+
         tunerService.save(tuner);
         User user1 = userService.findById(user.getId());
         return "redirect:/tunerOpen/" + user1.getTmp();

@@ -23,5 +23,8 @@ public class Team {
     @Length(max = 10240)
     private String description;
     private String logo;
+    @ManyToOne
+    @JoinColumn(name = "teamlogo_id")
+    private Photo teamLogo;
     private Integer points2021;
 }

@@ -206,7 +206,7 @@
                 <div class="twelve wide stretched column">
                     <div style="padding-top:0px" class="ui tab basic segment active" data-tab="photo">
                         <div style="margin-left:6px; margin-bottom: 10px">
-                            <a th:href="@{'/img/' + ${modification.bodyType.generation.manufacturer.name} +
+                            <a th:if="${modification.carPhoto}" th:href="@{'/img/' + ${modification.bodyType.generation.manufacturer.name} +
                     '/' + ${modification.bodyType.generation.carmodel.name} + '/' + ${modification.carPhoto.name}}" data-fancybox="gallery">
                                 <img class="ui medium image" th:src="@{'/img/' + ${modification.bodyType.generation.manufacturer.name} +
                     '/' + ${modification.bodyType.generation.carmodel.name} + '/' + ${modification.carPhoto.name}}" alt="">
@@ -214,7 +214,7 @@
                         </div>
                         <div class="block ui small images " th:each="ph: ${modification.carPhotos}">
                             <div>
-                                <a th:href="@{'/img/' + ${modification.bodyType.generation.manufacturer.name} +
+                                <a th:if="${modification.carPhoto}" th:href="@{'/img/' + ${modification.bodyType.generation.manufacturer.name} +
                     '/' + ${modification.bodyType.generation.carmodel.name} + '/' + ${ph.name}}" data-fancybox="gallery">
                                     <img th:src="@{'/img/' + ${modification.bodyType.generation.manufacturer.name} +
                     '/' + ${modification.bodyType.generation.carmodel.name} + '/' + ${ph.name}}">

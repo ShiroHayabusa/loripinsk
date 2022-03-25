@@ -62,7 +62,7 @@ public class ManufacturerController {
 
     @GetMapping("/manufacturerCreate")
     public String createManufacturerForm(Manufacturer manufacturer,
-                                         Model model){
+                                         Model model) {
         List<Country> countries = countryService.findAllByOrderByName();
         model.addAttribute("countries", countries);
         return "manufacturerCreate";
@@ -87,14 +87,14 @@ public class ManufacturerController {
     @GetMapping("/manufacturerUpdate/{id}")
     public String manufacturerUpdateForm(@AuthenticationPrincipal User user,
                                          @PathVariable Long id,
-                                         Model model){
+                                         Model model) {
         Manufacturer manufacturer = manufacturerService.findById(id);
         model.addAttribute("manufacturer", manufacturer);
 
         user.setTmp(id);
         userService.save(user);
 
-        existingPhoto = manufacturer.getLogo();
+        existingPhoto = manufacturer.getNewLogo();
         List<Country> countries = countryService.findAll();
         model.addAttribute("countries", countries);
         return "manufacturerUpdate";
@@ -105,24 +105,15 @@ public class ManufacturerController {
                                      Manufacturer manufacturer,
                                      @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + manufacturer.getName());
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            if (file.isEmpty()) {
-                manufacturer.setLogo(existingPhoto);
-            } else {
-                manufacturer.setLogo(resultFilename);
-            }
+        if (file.isEmpty()) {
+            manufacturer.setNewLogo(existingPhoto);
+        } else {
+            manufacturer.setNewLogo(fileUpload.fileUpload(file));
         }
+
         manufacturerService.saveManufacturer(manufacturer);
 
         User user1 = userService.findById(user.getId());
@@ -135,7 +126,7 @@ public class ManufacturerController {
                                    @AuthenticationPrincipal User user,
                                    Model model) {
         Manufacturer manufacturer = manufacturerService.findById(id);
-        model.addAttribute("manufacturer",manufacturer);
+        model.addAttribute("manufacturer", manufacturer);
 
         List<Carmodel> carmodels = carmodelService.findByManufacturerIdOrderByName(id);
         model.addAttribute("carmodels", carmodels);

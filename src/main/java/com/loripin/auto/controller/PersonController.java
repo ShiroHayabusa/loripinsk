@@ -2,6 +2,7 @@ package com.loripin.auto.controller;
 
 import com.loripin.auto.model.*;
 import com.loripin.auto.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,10 @@ import static com.loripin.auto.controller.ModificationController.existingPhoto;
 @Controller
 public class PersonController {
     private final
+    FileStorageImpl fileStorageImpl;
+    private final
+    FileUpload fileUpload;
+    private final
     UserService userService;
     private final
     TeamService teamService;
@@ -36,12 +41,14 @@ public class PersonController {
                             SeriesService seriesService,
                             PersonService personService,
                             TeamService teamService,
-                            UserService userService) {
+                            UserService userService, FileUpload fileUpload, FileStorageImpl fileStorageImpl) {
         this.countryService = countryService;
         this.seriesService = seriesService;
         this.personService = personService;
         this.teamService = teamService;
         this.userService = userService;
+        this.fileUpload = fileUpload;
+        this.fileStorageImpl = fileStorageImpl;
     }
 
     @Value("${upload.path}")
@@ -71,20 +78,15 @@ public class PersonController {
                                Person person,
                                @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/persons");
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            person.setPhoto(resultFilename);
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
         }
+
+        person.setPersonPhoto(fileUpload.fileUpload(file));
+
         personService.save(person);
 
         User user1 = userService.findById(user.getId());
@@ -107,7 +109,7 @@ public class PersonController {
         user.setTmp(id);
         userService.save(user);
 
-        existingPhoto = person.getPhoto();
+        existingPhoto = person.getPersonPhoto();
         return "personUpdate";
     }
 
@@ -116,23 +118,13 @@ public class PersonController {
                                Person person,
                                @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-            if (file.isEmpty()) {
-                person.setPhoto(existingPhoto);
-            } else {
-                person.setPhoto(resultFilename);
-            }
+        if (file.isEmpty()) {
+            person.setPersonPhoto(existingPhoto);
+        } else {
+            person.setPersonPhoto(fileUpload.fileUpload(file));
         }
+
         personService.save(person);
 
         User user1 = userService.findById(user.getId());
@@ -142,7 +134,7 @@ public class PersonController {
 
     @GetMapping("/personOpen/{id}")
     public String personOpen(@PathVariable("id") Long id,
-                             Model model){
+                             Model model) {
         Person person = personService.findById(id);
         model.addAttribute("person", person);
         return "personOpen";
@@ -151,7 +143,7 @@ public class PersonController {
     @GetMapping("/autosport/persons/{id}")
     public String Persons(@AuthenticationPrincipal User user,
                           @PathVariable("id") Long id,
-                          Model model){
+                          Model model) {
         Series series = seriesService.findById(id);
         model.addAttribute("series", series);
 

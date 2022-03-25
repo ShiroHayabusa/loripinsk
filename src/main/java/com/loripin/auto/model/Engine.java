@@ -30,5 +30,8 @@ public class Engine {
     @Length(max = 10240)
     private String description;
     private String photo;
+    @ManyToOne
+    @JoinColumn(name = "enginephoto_id")
+    private Photo enginePhoto;
 
 }

@@ -28,4 +28,7 @@ public class Person {
     @JoinColumn(name = "team_id")
     private Team team;
     private Boolean navigator;
+    @ManyToOne
+    @JoinColumn(name = "personphoto_id")
+    private Photo personPhoto;
 }

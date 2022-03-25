@@ -107,8 +107,8 @@ public class ModificationController {
     private String uploadPath;
 
 
-    public static String existingPhoto;
-    public static List<String> existingPhotos;
+    public static Photo existingPhoto;
+    public static List<Photo> existingPhotos;
     public static String resultFilename;
 
 
@@ -256,8 +256,8 @@ public class ModificationController {
         user.setTmp(id);
         userService.save(user);
 
-        existingPhoto = modification.getPhoto();
-        existingPhotos = modification.getPhotos();
+        existingPhoto = modification.getCarPhoto();
+        existingPhotos = modification.getCarPhotos();
         return "modificationUpdate";
     }
 
@@ -268,19 +268,20 @@ public class ModificationController {
                                      @RequestParam("file1") MultipartFile file1,
                                      @RequestParam("files") MultipartFile[] files)
             throws IOException {
-        uploadFile(modification, file1);
+
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp +
+                "/" + CarmodelController.carModelTemp);
+
         if (file1.isEmpty()) {
-            modification.setPhoto(existingPhoto);
+            modification.setCarPhoto(existingPhoto);
         } else {
-            modification.setPhoto(resultFilename);
+            modification.setCarPhoto(fileUpload.fileUpload(file1));
         }
 
-
-        List<String> fileNames = uploadFiles(model, files);
-        if (fileNames == null) {
-            modification.setPhotos(existingPhotos);
+        if (files[0].getOriginalFilename() == "") {
+            modification.setCarPhotos(existingPhotos);
         } else {
-            modification.setPhotos(fileNames);
+            modification.setCarPhotos(fileUpload.multiFilesUpload(files));
         }
 
         if (modification.getUniq() != null) {

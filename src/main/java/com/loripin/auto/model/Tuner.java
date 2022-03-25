@@ -19,4 +19,7 @@ public class Tuner {
     @Length(max = 10240)
     private String description;
     private String logo;
+    @ManyToOne
+    @JoinColumn(name = "tunerlogo_id")
+    private Photo tunerLogo;
 }

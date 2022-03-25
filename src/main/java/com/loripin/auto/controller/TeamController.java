@@ -24,6 +24,10 @@ import static com.loripin.auto.controller.ModificationController.existingPhoto;
 @Controller
 public class TeamController {
     private final
+    FileUpload fileUpload;
+    private final
+    FileStorageImpl fileStorageImpl;
+    private final
     UserService userService;
     private final
     PersonService personService;
@@ -38,12 +42,14 @@ public class TeamController {
                           CountryService countryService,
                           SeriesService seriesService,
                           PersonService personService,
-                          UserService userService) {
+                          UserService userService, FileStorageImpl fileStorageImpl, FileUpload fileUpload) {
         this.teamService = teamService;
         this.countryService = countryService;
         this.seriesService = seriesService;
         this.personService = personService;
         this.userService = userService;
+        this.fileStorageImpl = fileStorageImpl;
+        this.fileUpload = fileUpload;
     }
 
     @Value("${upload.path}")
@@ -63,20 +69,14 @@ public class TeamController {
                              Team team,
                              @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + team.getName());
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            team.setLogo(resultFilename);
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
         }
+
+        team.setTeamLogo(fileUpload.fileUpload(file));
+
         teamService.save(team);
         User user1 = userService.findById(user.getId());
         return "redirect:/autosport/teams/" + user1.getTmp();
@@ -92,7 +92,7 @@ public class TeamController {
         List<Series> series = seriesService.findAll();
         model.addAttribute("countries", countries);
         model.addAttribute("series", series);
-        existingPhoto = team.getLogo();
+        existingPhoto = team.getTeamLogo();
         user.setTmp(team.getId());
         userService.save(user);
         return "teamUpdate";
@@ -103,30 +103,22 @@ public class TeamController {
                              Team team,
                              @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + team.getName());
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-            if (file.isEmpty()) {
-                team.setLogo(existingPhoto);
-            } else {
-                team.setLogo(resultFilename);
-            }
+        if (file.isEmpty()) {
+            team.setTeamLogo(existingPhoto);
+        } else {
+            team.setTeamLogo(fileUpload.fileUpload(file));
         }
+
         teamService.save(team);
         User user1 = userService.findById(user.getId());
         return "redirect:/teamOpen/" + user1.getTmp();
     }
 
     @GetMapping("/teamOpen/{id}")
-    public String teamOpen(@PathVariable("id") Long id, Model model){
+    public String teamOpen(@PathVariable("id") Long id, Model model) {
         Team team = teamService.findById(id);
         model.addAttribute("team", team);
         List<Person> pilots = personService.findByTeamIdAndNavigatorOrderByNameAsc(id, null);
@@ -139,7 +131,7 @@ public class TeamController {
     @GetMapping("/autosport/teams/{id}")
     public String Teams(@AuthenticationPrincipal User user,
                         @PathVariable("id") Long id,
-                        Model model){
+                        Model model) {
         Series series = seriesService.findById(id);
 
         if (user != null) {

@@ -22,6 +22,8 @@ import static com.loripin.auto.controller.ModificationController.existingPhoto;
 @Controller
 public class EngineController {
     private final
+    FileUpload fileUpload;
+    private final
     ModificationService modificationService;
     private final
     ManufacturerService manufacturerService;
@@ -35,12 +37,13 @@ public class EngineController {
     public EngineController(EngineService engineService,
                             EngineTypeService engineTypeService,
                             FuelService fuelService,
-                            ManufacturerService manufacturerService, ModificationService modificationService) {
+                            ManufacturerService manufacturerService, ModificationService modificationService, FileUpload fileUpload) {
         this.engineService = engineService;
         this.engineTypeService = engineTypeService;
         this.fuelService = fuelService;
         this.manufacturerService = manufacturerService;
         this.modificationService = modificationService;
+        this.fileUpload = fileUpload;
     }
 
     @Value("${upload.path}")
@@ -92,7 +95,7 @@ public class EngineController {
                                    Model model){
         Engine engine = engineService.findById(id);
         model.addAttribute("engine", engine);
-        existingPhoto = engine.getPhoto();
+        existingPhoto = engine.getEnginePhoto();
         List<EngineType> engineTypes = engineTypeService.findAllByOrderByNameAsc();
         model.addAttribute("engineTypes", engineTypes);
         List<Fuel> fuels = fuelService.findAllByOrderByIdAsc();
@@ -106,24 +109,13 @@ public class EngineController {
     public String engineUpdate(Engine engine,
                                @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
 
             if (file.isEmpty()) {
-                engine.setPhoto(existingPhoto);
+                engine.setEnginePhoto(existingPhoto);
             } else {
-                engine.setPhoto(resultFilename);
+                engine.setEnginePhoto(fileUpload.fileUpload(file));
             }
-        }
+
         engineService.save(engine);
         return "redirect:/engineList";
     }

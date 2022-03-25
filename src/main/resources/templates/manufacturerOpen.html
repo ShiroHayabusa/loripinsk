@@ -18,7 +18,7 @@
   <div class="ui items">
     <div class="item">
       <div class="ui small image">
-        <img th:src="@{'/img/' + ${manufacturer.getLogo()}}">
+        <img th:src="@{'/img/' + ${manufacturer.name} + '/' + ${manufacturer.newLogo.name}}">
       </div>
       <div class="content">
         <div class="header">

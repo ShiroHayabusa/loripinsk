@@ -16,13 +16,13 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotBlank(message = "Поле 'Имя пользователя' не может быть пустым!")
+    @NotBlank(message = "The field 'Username' cannot be empty!")
     private String username;
-    @NotBlank(message = "Поле 'Пароль' не может быть пустым!")
+    @NotBlank(message = "The field 'Password' cannot be empty!")
     private String password;
     private boolean active;
-    @Email(message = "Email введен неверно!")
-    @NotBlank(message = "Поле 'E-mail' не может быть пустым!")
+    @Email(message = "e-mail is incorrect!")
+    @NotBlank(message = "The field 'e-mail' cannot be empty!")
     private String email;
     private String activationCode;
     private String avatar;

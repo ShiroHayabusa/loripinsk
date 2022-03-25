@@ -19,4 +19,7 @@ public class Manufacturer {
     @Length(max = 10240)
     private String description;
     private String logo;
+    @ManyToOne
+    @JoinColumn(name = "carphoto_id")
+    private Photo newLogo;
 }

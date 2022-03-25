@@ -2,6 +2,7 @@ package com.loripin.auto.controller;
 
 import com.loripin.auto.model.*;
 import com.loripin.auto.service.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,10 @@ import static com.loripin.auto.controller.ModificationController.existingPhoto;
 @Controller
 public class ManufacturerController {
     private final
+    FileStorageImpl fileStorageImpl;
+    private final
+    FileUpload fileUpload;
+    private final
     UserService userService;
     private final
     ModificationService modificationService;
@@ -36,12 +41,14 @@ public class ManufacturerController {
                                   CountryService countryService,
                                   CarmodelService carmodelService,
                                   ModificationService modificationService,
-                                  UserService userService) {
+                                  UserService userService, FileUpload fileUpload, FileStorageImpl fileStorageImpl) {
         this.manufacturerService = manufacturerService;
         this.countryService = countryService;
         this.carmodelService = carmodelService;
         this.modificationService = modificationService;
         this.userService = userService;
+        this.fileUpload = fileUpload;
+        this.fileStorageImpl = fileStorageImpl;
     }
 
     @Value("${upload.path}")
@@ -65,20 +72,14 @@ public class ManufacturerController {
     public String createManufacturer(Manufacturer manufacturer,
                                      @RequestParam("file") MultipartFile file
     ) throws IOException {
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + manufacturer.getName());
 
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            manufacturer.setLogo(resultFilename);
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
         }
+
+        manufacturer.setNewLogo(fileUpload.fileUpload(file));
         manufacturerService.saveManufacturer(manufacturer);
         return "redirect:/catalog";
     }
@@ -141,6 +142,7 @@ public class ManufacturerController {
 
         List<Modification> modifications = modificationService.findAll();
         model.addAttribute("modifications", modifications);
+
         if (user != null) {
 
             user.setTmp(id);

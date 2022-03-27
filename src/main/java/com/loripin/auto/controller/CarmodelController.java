@@ -123,9 +123,6 @@ public class CarmodelController {
         Carmodel carmodel = carmodelService.findById(id);
         model.addAttribute("carmodel", carmodel);
 
-        manufacturerTemp = carmodel.getManufacturer();
-        carModelTemp = carmodel;
-
         if (user != null) {
             user.setTmp(id);
             userService.save(user);

@@ -56,7 +56,6 @@ public class GenerationController {
 
     public static String manufacturer2;
     public static String carmodel2;
-    public static Carmodel carmodel3;
 
     @GetMapping("/generationCreate")
     public String createGenerationForm(@AuthenticationPrincipal User user,
@@ -67,7 +66,6 @@ public class GenerationController {
 
         User user1 = userService.findById(user.getId());
         Carmodel carmodel = carmodelService.findById(user1.getTmp());
-        carmodel3 = carmodel;
         model.addAttribute("carmodel", carmodel);
         return "generationCreate";
     }
@@ -78,9 +76,11 @@ public class GenerationController {
                                    @RequestParam("file") MultipartFile file
     ) throws IOException {
 
-        File uploadDir1 = new File(uploadPath + "/" + carmodel3.getManufacturer().getName());
-        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + carmodel3.getManufacturer().getName() +
-                "/" + carmodel3.getName());
+        Long tmp = userService.findById(user.getId()).getTmp();
+        Carmodel carmodel = carmodelService.findById(tmp);
+        File uploadDir1 = new File(uploadPath + "/" + carmodel.getManufacturer().getName());
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + carmodel.getManufacturer().getName() +
+                "/" + carmodel.getName());
 
         if (!uploadDir1.exists()) {
             uploadDir1.mkdir();
@@ -94,8 +94,8 @@ public class GenerationController {
 
         User user1 = userService.findById(user.getId());
 
-        generation.setManufacturer(CarmodelController.manufacturerTemp);
-        generation.setCarmodel(CarmodelController.carModelTemp);
+        generation.setManufacturer(carmodel.getManufacturer());
+        generation.setCarmodel(carmodel);
         generationService.saveGeneration(generation);
         return "redirect:/catalog/manufacturer/carmodel/" + user1.getTmp();
     }

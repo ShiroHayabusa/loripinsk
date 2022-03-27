@@ -162,9 +162,14 @@ public class ModificationController {
                                      @RequestParam("files") MultipartFile[] files
     ) throws IOException {
 
-        File uploadDir1 = new File(uploadPath + "/" + RestyleController.manufacturer1);
-        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + RestyleController.manufacturer1 +
-                "/" + RestyleController.carmodel1);
+        User user1 = userService.findById(user.getId());
+        BodyType bodyType = bodyTypeService.findById(user1.getTmp());
+        String tmpManufacturer = bodyType.getGeneration().getManufacturer().getName();
+        String tmpCarModel = bodyType.getGeneration().getCarmodel().getName();
+
+        File uploadDir1 = new File(uploadPath + "/" + tmpManufacturer);
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + tmpManufacturer +
+                "/" + tmpCarModel);
 
         if (!uploadDir1.exists()) {
             uploadDir1.mkdir();
@@ -179,8 +184,6 @@ public class ModificationController {
         if (!files[0].getOriginalFilename().isEmpty()) {
             modification.setCarPhotos(fileUpload.multiFilesUpload(files));
         }
-
-        User user1 = userService.findById(user.getId());
 
         modification.setBodyType(bodyTypeService.findById(user1.getTmp()));
         modification.setAltName(null);

@@ -1,9 +1,6 @@
 package com.loripin.auto.controller;
 
-import com.loripin.auto.model.Body;
-import com.loripin.auto.model.BodyType;
-import com.loripin.auto.model.Generation;
-import com.loripin.auto.model.User;
+import com.loripin.auto.model.*;
 import com.loripin.auto.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -59,16 +56,19 @@ public class GenerationController {
 
     public static String manufacturer2;
     public static String carmodel2;
+    public static Carmodel carmodel3;
 
     @GetMapping("/generationCreate")
     public String createGenerationForm(@AuthenticationPrincipal User user,
+                                       Generation generation,
                                        Model model) {
         List<Body> bodies = bodyService.findAllByOrderByNameAsc();
         model.addAttribute("bodies", bodies);
 
         User user1 = userService.findById(user.getId());
-
-        model.addAttribute("carmodel", carmodelService.findById(user1.getTmp()));
+        Carmodel carmodel = carmodelService.findById(user1.getTmp());
+        carmodel3 = carmodel;
+        model.addAttribute("carmodel", carmodel);
         return "generationCreate";
     }
 
@@ -78,9 +78,9 @@ public class GenerationController {
                                    @RequestParam("file") MultipartFile file
     ) throws IOException {
 
-        File uploadDir1 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp.getName());
-        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp.getName() +
-                "/" + CarmodelController.carModelTemp.getName());
+        File uploadDir1 = new File(uploadPath + "/" + carmodel3.getManufacturer().getName());
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + carmodel3.getManufacturer().getName() +
+                "/" + carmodel3.getName());
 
         if (!uploadDir1.exists()) {
             uploadDir1.mkdir();

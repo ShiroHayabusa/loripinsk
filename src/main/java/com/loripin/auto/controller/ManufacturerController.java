@@ -137,7 +137,6 @@ public class ManufacturerController {
         List<Carmodel> carmodels = carmodelService.findByManufacturerIdOrderByName(id);
         model.addAttribute("carmodels", carmodels);
 
-        CarmodelController.manufacturerTemp = manufacturerService.findById(id).getName();
         tmpManufacturer = id;
 
         if (user != null) {

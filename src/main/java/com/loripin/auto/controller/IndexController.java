@@ -30,6 +30,9 @@ public class IndexController {
     public static final String DATE_FORMAT_NOW = "dd.MM.yyyy HH:mm";
 
     private final
+    PhotoService photoService;
+
+    private final
     SpotService spotService;
 
     private final
@@ -66,7 +69,7 @@ public class IndexController {
                            CommentService commentService,
                            UserService userService,
                            ReplyService replyService,
-                           SpotService spotService) {
+                           SpotService spotService, PhotoService photoService) {
         this.articleService = articleService;
         this.articleRepo = articleRepo;
         this.fileStorage = fileStorage;
@@ -78,6 +81,7 @@ public class IndexController {
         this.userService = userService;
         this.replyService = replyService;
         this.spotService = spotService;
+        this.photoService = photoService;
     }
 
     public static Long tempId;
@@ -113,6 +117,12 @@ public class IndexController {
   //      List<Article> articles = articleService.findAllByOrderByIdDesc();
   //      model.addAttribute("articles", articles);
 
+        Integer cars = modificationService.findAll().size();
+        model.addAttribute("cars", cars);
+        Integer dbPhotos = photoService.findAll().size();
+        model.addAttribute("dbPhotos", dbPhotos);
+        Integer models = carmodelService.findAll().size();
+        model.addAttribute("models", models);
 
         return "index";
     }

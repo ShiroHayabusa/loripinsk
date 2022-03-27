@@ -60,10 +60,13 @@ public class RestyleController {
     @Value("${upload.path}")
     private String uploadPath;
 
+    public static String manufacturer1;
+    public static String carmodel1;
+
     @GetMapping("/restyleCreate")
     public String createRestyleForm(@AuthenticationPrincipal User user,
                                     Restyle restyle,
-                                    Model model){
+                                    Model model) {
         User user1 = userService.findById(user.getId());
         Generation generation = generationService.findById(user1.getTmp());
         model.addAttribute("generation", generation);
@@ -101,14 +104,23 @@ public class RestyleController {
                                 @RequestParam("file") MultipartFile file
     ) throws IOException {
 
-        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp +
-                "/" + CarmodelController.carModelTemp);
+        File uploadDir1 = new File(uploadPath + "/" + bodyType.getGeneration().getManufacturer().getName());
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + bodyType.getGeneration().getManufacturer().getName() +
+                "/" + bodyType.getGeneration().getCarmodel().getName());
 
-            if (file.isEmpty()) {
-                bodyType.setCarPhoto(existingPhoto);
-            } else {
-                bodyType.setCarPhoto(fileUpload.fileUpload(file));
-            }
+        if (!uploadDir1.exists()) {
+            uploadDir1.mkdir();
+        }
+
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
+        }
+
+        if (file.isEmpty()) {
+            bodyType.setCarPhoto(existingPhoto);
+        } else {
+            bodyType.setCarPhoto(fileUpload.fileUpload(file));
+        }
 
         bodyTypeService.save(bodyType);
         User user1 = userService.findById(user.getId());
@@ -122,14 +134,19 @@ public class RestyleController {
         List<Modification> modifications = modificationService.findByBodyTypeIdOrderByName(id);
         model.addAttribute("modifications", modifications);
         int counter = 0;
-        for (Modification modification: modifications) {
+        for (Modification modification : modifications) {
             if (modification.getTuner() != null) {
                 counter = counter + 1;
             }
         }
         model.addAttribute("counter", counter);
+
         BodyType bodyType = bodyTypeService.findById(id);
         model.addAttribute("bodyType", bodyType);
+
+        manufacturer1 = bodyType.getGeneration().getManufacturer().getName();
+        carmodel1 = bodyType.getGeneration().getCarmodel().getName();
+
         if (user != null) {
             user.setTmp(bodyType.getId());
             userService.save(user);

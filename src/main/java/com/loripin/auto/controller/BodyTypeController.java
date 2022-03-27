@@ -94,9 +94,9 @@ public class BodyTypeController {
                                  @RequestParam("file") MultipartFile file
     ) throws IOException {
 
-        File uploadDir1 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp);
-        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp +
-                "/" + CarmodelController.carModelTemp);
+        File uploadDir1 = new File(uploadPath + "/" + GenerationController.manufacturer2);
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + GenerationController.manufacturer2 +
+                "/" + GenerationController.carmodel2);
 
         if (!uploadDir1.exists()) {
             uploadDir1.mkdir();

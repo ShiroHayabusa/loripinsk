@@ -31,6 +31,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -39,6 +43,10 @@
       <div th:each="manus: ${manufacturers}" th:if="${#strings.startsWith(manus.name,'B')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
 
@@ -49,6 +57,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -58,6 +70,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -66,6 +82,10 @@
       <div th:each="manus: ${manufacturers}" th:if="${#strings.startsWith(manus.name,'E')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
     </div>
@@ -80,6 +100,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -88,6 +112,10 @@
       <div th:each="manus: ${manufacturers}" th:if="${#strings.startsWith(manus.name,'G')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
 
@@ -98,6 +126,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -107,6 +139,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -115,6 +151,10 @@
       <div th:each="manus: ${manufacturers}" th:if="${#strings.startsWith(manus.name,'J')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
     </div>
@@ -129,6 +169,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -137,6 +181,10 @@
       <div th:each="manus: ${manufacturers}" th:if="${#strings.startsWith(manus.name,'L')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
 
@@ -147,6 +195,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -156,6 +208,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -164,6 +220,10 @@
       <div th:each="manus: ${manufacturers}" th:if="${#strings.startsWith(manus.name,'O')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
     </div>
@@ -178,6 +238,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -186,6 +250,10 @@
       <div th:each="manus: ${manufacturers}" th:if="${#strings.startsWith(manus.name,'Q')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
 
@@ -196,6 +264,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -205,6 +277,10 @@
                                                 or ${#strings.startsWith(manus.name,'s')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
     </div>
@@ -219,6 +295,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -227,6 +307,10 @@
       <div th:each="manus: ${manufacturers}" th:if="${#strings.startsWith(manus.name,'U')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
 
@@ -237,6 +321,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -245,6 +333,10 @@
       <div th:each="manus: ${manufacturers}" th:if="${#strings.startsWith(manus.name,'W')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
     </div>
@@ -259,6 +351,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -268,6 +364,10 @@
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
         </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
+        </a>
       </div>
 
       <h3 class="ui dividing header">
@@ -276,6 +376,10 @@
       <div th:each="manus: ${manufacturers}" th:if="${#strings.startsWith(manus.name,'Z')}">
         <a class="item" th:href="@{catalog/manufacturer/{id}(id=${manus.id})}">
           <span th:text="${manus.name}"></span>
+        </a>
+        <a th:href="@{/catalog/manufacturer/delete/{id}(id=${manus.id})}"
+           sec:authorize="hasAuthority('ADMIN')">
+          <i class="grey small x icon"></i>
         </a>
       </div>
     </div>

@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.w3.org/1999/xhtml">
 
 <div th:insert="parts/_header :: header"></div>
@@ -43,7 +43,7 @@
     <div class="card" th:each="gens: ${generations}">
       <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id=${gens.id})}">
         <img th:if="${gens.carPhoto}"
-                th:src="@{'/img/' + ${gens.manufacturer.name} + '/' + ${gens.carmodel.name} + '/' + ${gens.carPhoto.name}}">
+             th:src="@{'/img/' + ${gens.manufacturer.name} + '/' + ${gens.carmodel.name} + '/' + ${gens.carPhoto.name}}">
       </a>
       <div class="content">
         <a class="header" th:text="${gens.name}" th:href="@{/catalog/manufacturer/carmodel/generation/{id}(id=${gens.id})}"></a>

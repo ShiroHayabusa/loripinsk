@@ -5,840 +5,632 @@
 <div th:insert="parts/_menu :: menu"></div>
 
 <div style="margin-left:20px" class="ui mini breadcrumb">
-  <a class="section" href="/">Home</a>
-  <i class="right angle icon divider"></i>
-  <a class="section" href="/catalog">Catalog</a>
-  <i class="right angle icon divider"></i>
-  <div class="active section" th:text="${manufacturer.getName()}"></div>
+    <a class="section" href="/">Home</a>
+    <i class="right angle icon divider"></i>
+    <a class="section" href="/catalog">Catalog</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section" th:text="${manufacturer.getName()}"></div>
 </div>
 
 <div style="margin-left: 20px; margin-right: 20px" class="ui divider"></div>
 
 <div class="ui container">
-  <div class="ui items">
-    <div class="item">
-      <div class="ui small image">
-        <img th:if="${manufacturer.newLogo}"
-                th:src="@{'/img/' + ${manufacturer.name} + '/' + ${manufacturer.newLogo.name}}">
-      </div>
-      <div class="content">
-        <div class="header">
-          <h1 th:text="${manufacturer.getName()}"></h1>
+    <div class="ui items">
+        <div class="item">
+            <div class="ui small image">
+                <img th:if="${manufacturer.newLogo}"
+                     th:src="@{'/img/' + ${manufacturer.name} + '/' + ${manufacturer.newLogo.name}}">
+            </div>
+            <div class="content">
+                <div class="header">
+                    <h1 th:text="${manufacturer.getName()}"></h1>
+                </div>
+                <div class="meta">
+                    <span class="price" th:if="${manufacturer.country}" th:text="${manufacturer.country.name}"></span>
+                    <form style="margin-top: 10px" th:action="@{/manufacturerUpdate/{id}(id=${manufacturer.id})}"
+                          sec:authorize="hasAuthority('ADMIN')">
+                        <button class="ui basic button">
+                            <i class="edit icon"></i>
+                            Edit
+                        </button>
+                    </form>
+                    <span class="stay"></span>
+                </div>
+                <div class="description">
+                    <p th:text="${manufacturer.getDescription()}"></p>
+                </div>
+            </div>
         </div>
-        <div class="meta">
-          <span class="price" th:if="${manufacturer.country}" th:text="${manufacturer.country.name}"></span>
-          <form style="margin-top: 10px" th:action="@{/manufacturerUpdate/{id}(id=${manufacturer.id})}"
-                sec:authorize ="hasAuthority('ADMIN')">
-            <button class="ui basic button">
-              <i class="edit icon"></i>
-              Edit
-            </button>
-          </form>
-          <span class="stay"></span>
-        </div>
-        <div class="description">
-          <p th:text="${manufacturer.getDescription()}"></p>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
 
 <div style="margin-left: 20px; margin-right: 20px" class="ui divider"></div>
-<form style="margin-left: 20px" action="/carmodelCreate" sec:authorize ="hasAuthority('ADMIN')">
-  <button class="ui basic button">
-    <i class="plus icon"></i>
-    Add model
-  </button>
+<form style="margin-left: 20px" action="/carmodelCreate" sec:authorize="hasAuthority('ADMIN')">
+    <button class="ui basic button">
+        <i class="plus icon"></i>
+        Add model
+    </button>
 </form>
-<div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize ="hasAuthority('ADMIN')"></div>
+<div style="margin-left: 20px; margin-right: 20px" class="ui divider" sec:authorize="hasAuthority('ADMIN')"></div>
 <body>
 <div class="ui six column doubling stackable grid container">
 
-  <div class="column">
-    <div class="ui link list">
-      <h3 class="ui dividing header">
-        1
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'1')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
-      <h3 class="ui dividing header">
-        2
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'2')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+    <div class="column">
+        <div class="ui link list">
 
-      <h3 class="ui dividing header">
-        3
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'3')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                1
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'1')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        4
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'4')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                2
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'2')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        5
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'5')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                3
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'3')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        6
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'6')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                4
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'4')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        7
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'7')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                5
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'5')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        8
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'8')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                6
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'6')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        9
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'9')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
+            <h3 class="ui dividing header">
+                7
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'7')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <h3 class="ui dividing header">
+                8
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'8')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <h3 class="ui dividing header">
+                9
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'9')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div class="column">
-    <div class="ui link list">
-      <h3 class="ui dividing header">
-        A
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'A')}
-                                              or ${#strings.startsWith(models.name,'a')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+    <div class="column">
+        <div class="ui link list">
+            <h3 class="ui dividing header">
+                A
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'A')}
+                                              or ${#strings.startsWith(models.name,'a')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        B
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'B')}
-                                              or ${#strings.startsWith(models.name,'b')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                B
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'B')}
+                                              or ${#strings.startsWith(models.name,'b')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        C
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'C')}
-                                              or ${#strings.startsWith(models.name,'c')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                C
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'C')}
+                                              or ${#strings.startsWith(models.name,'c')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        D
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'D')}
-                                              or ${#strings.startsWith(models.name,'d')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                D
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'D')}
+                                              or ${#strings.startsWith(models.name,'d')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        E
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'E')}
-                                              or ${#strings.startsWith(models.name,'e')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                E
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'E')}
+                                              or ${#strings.startsWith(models.name,'e')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        F
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'F')}
-                                              or ${#strings.startsWith(models.name,'f')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
+            <h3 class="ui dividing header">
+                F
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'F')}
+                                              or ${#strings.startsWith(models.name,'f')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div class="column">
-    <div class="ui link list">
-      <h3 class="ui dividing header">
-        G
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'G')}
-                                              or ${#strings.startsWith(models.name,'g')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+    <div class="column">
+        <div class="ui link list">
+            <h3 class="ui dividing header">
+                G
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'G')}
+                                              or ${#strings.startsWith(models.name,'g')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        H
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'H')}
-                                              or ${#strings.startsWith(models.name,'h')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                H
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'H')}
+                                              or ${#strings.startsWith(models.name,'h')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        I
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'I')}
-                                              or ${#strings.startsWith(models.name,'i')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                I
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'I')}
+                                              or ${#strings.startsWith(models.name,'i')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        J
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'J')}
-                                              or ${#strings.startsWith(models.name,'j')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                J
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'J')}
+                                              or ${#strings.startsWith(models.name,'j')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        K
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'K')}
-                                              or ${#strings.startsWith(models.name,'k')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
+            <h3 class="ui dividing header">
+                K
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'K')}
+                                              or ${#strings.startsWith(models.name,'k')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div class="column">
-    <div class="ui link list">
-      <h3 class="ui dividing header">
-        L
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'L')}
-                                              or ${#strings.startsWith(models.name,'l')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+    <div class="column">
+        <div class="ui link list">
+            <h3 class="ui dividing header">
+                L
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'L')}
+                                              or ${#strings.startsWith(models.name,'l')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        M
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'M')}
-                                              or ${#strings.startsWith(models.name,'m')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                M
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'M')}
+                                              or ${#strings.startsWith(models.name,'m')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        N
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'N')}
-                                              or ${#strings.startsWith(models.name,'n')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                N
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'N')}
+                                              or ${#strings.startsWith(models.name,'n')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        O
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'O')}
-                                              or ${#strings.startsWith(models.name,'o')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                O
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'O')}
+                                              or ${#strings.startsWith(models.name,'o')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        P
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'P')}
-                                              or ${#strings.startsWith(models.name,'p')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
+            <h3 class="ui dividing header">
+                P
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'P')}
+                                              or ${#strings.startsWith(models.name,'p')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div class="column">
-    <div class="ui link list">
-      <h3 class="ui dividing header">
-        Q
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'Q')}
-                                              or ${#strings.startsWith(models.name,'q')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+    <div class="column">
+        <div class="ui link list">
+            <h3 class="ui dividing header">
+                Q
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'Q')}
+                                              or ${#strings.startsWith(models.name,'q')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        R
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'R')}
-                                              or ${#strings.startsWith(models.name,'r')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                R
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'R')}
+                                              or ${#strings.startsWith(models.name,'r')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        S
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'S')}
-                                              or ${#strings.startsWith(models.name,'s')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                S
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'S')}
+                                              or ${#strings.startsWith(models.name,'s')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        T
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'T')}
-                                              or ${#strings.startsWith(models.name,'t')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                T
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'T')}
+                                              or ${#strings.startsWith(models.name,'t')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        U
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'U')}
-                                              or ${#strings.startsWith(models.name,'u')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
+            <h3 class="ui dividing header">
+                U
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'U')}
+                                              or ${#strings.startsWith(models.name,'u')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <div class="column">
-    <div class="ui link list">
+    <div class="column">
+        <div class="ui link list">
 
-      <h3 class="ui dividing header">
-        V
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'V')}
-                                              or ${#strings.startsWith(models.name,'v')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                V
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'V')}
+                                              or ${#strings.startsWith(models.name,'v')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        W
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'W')}
-                                              or ${#strings.startsWith(models.name,'w')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                W
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'W')}
+                                              or ${#strings.startsWith(models.name,'w')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        X
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'X')}
-                                              or ${#strings.startsWith(models.name,'x')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                X
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'X')}
+                                              or ${#strings.startsWith(models.name,'x')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        Y
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'Y')}
-                                              or ${#strings.startsWith(models.name,'y')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
-        </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
+            <h3 class="ui dividing header">
+                Y
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'Y')}
+                                              or ${#strings.startsWith(models.name,'y')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
 
-      <h3 class="ui dividing header">
-        Z
-      </h3>
-      <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'Z')}
-                                              or ${#strings.startsWith(models.name,'z')}"
-           th:switch="${models.uniq}">
-        <div th:case="${true}">
-          <div th:each="modification: ${modifications}"
-               th:if="${modification.bodyType.generation.carmodel} == ${models}">
-            <a class="item"
-               th:href="@{/catalog/manufacturer/carmodel/generation/restyle/modification/{id}(id=${modification.id})}">
-              <span th:text="${models.name}"></span>
-            </a>
-          </div>
+            <h3 class="ui dividing header">
+                Z
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'Z')}
+                                              or ${#strings.startsWith(models.name,'z')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div>
-          <a th:case="${null}" class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
-            <span th:text="${models.name}"></span>
-          </a>
-        </div>
-      </div>
     </div>
-  </div>
 </div>
 <div class="ui divider"></div>
 <div th:insert="parts/_footer :: footer"></div>

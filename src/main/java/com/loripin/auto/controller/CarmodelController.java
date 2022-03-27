@@ -45,8 +45,8 @@ public class CarmodelController {
     }
 
     public static List<String> existingUniqPhotos;
-    public static String manufacturerTemp;
-    public static String carModelTemp;
+    public static Manufacturer manufacturerTemp;
+    public static Carmodel carModelTemp;
 
     @GetMapping("/carmodelCreate")
     public String createCarmodelForm(@AuthenticationPrincipal User user,
@@ -92,6 +92,16 @@ public class CarmodelController {
         return "redirect:/catalog/manufacturer/carmodel/" + user1.getTmp();
     }
 
+    @GetMapping("/catalog/manufacturer/carmodel/delete/{id}")
+    public String deleteGeneration(@AuthenticationPrincipal User user,
+                                   @PathVariable("id") Long id) {
+        carmodelService.deleteById(id);
+
+        User user1 = userService.findById(user.getId());
+
+        return "redirect:/catalog/manufacturer/" + user1.getTmp();
+    }
+
     @GetMapping("uniqUpdate/{id}")
     public String updateUniqForm(@PathVariable("id") Long id,
                                  Model model) {
@@ -113,6 +123,9 @@ public class CarmodelController {
         Carmodel carmodel = carmodelService.findById(id);
         model.addAttribute("carmodel", carmodel);
 
+        manufacturerTemp = carmodel.getManufacturer();
+        carModelTemp = carmodel;
+
         if (user != null) {
             user.setTmp(id);
             userService.save(user);
@@ -120,9 +133,6 @@ public class CarmodelController {
 
         List<Generation> generations = generationService.findByCarmodelIdOrderByYearsAsc(id);
         model.addAttribute("generations", generations);
-
-        manufacturerTemp = carmodel.getManufacturer().getName();
-        carModelTemp = carmodel.getName();
 
         return "generations";
     }
@@ -136,12 +146,9 @@ public class CarmodelController {
     }
 
     @GetMapping("/catalog/manufacturer/carmodel/uniq/delete/{id}")
-    public String uniqDelete(@AuthenticationPrincipal User user,
-                             @PathVariable Long id) {
+    public String uniqDelete(@AuthenticationPrincipal User user, @PathVariable Long id) {
         carmodelService.deleteById(id);
 
-        User user1 = userService.findById(user.getId());
-
-        return "redirect:/catalog/manufacturer/" + user1.getTmp();
+        return "redirect:/catalog/manufacturer/" + user.getTmp();
     }
 }

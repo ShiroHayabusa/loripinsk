@@ -34,4 +34,8 @@ public class ManufacturerService {
     public List<Manufacturer> findAllByOrderByNameAsc() {
         return manufacturerRepo.findAllByOrderByNameAsc();
     }
+
+    public void deleteById(Long id) {
+        manufacturerRepo.deleteById(id);
+    }
 }

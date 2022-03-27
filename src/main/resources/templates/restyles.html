@@ -78,7 +78,8 @@
   <div class="ui five cards" th:if="${restyles1.size() > 0}">
     <div class="card" th:each="rest: ${restyles1}">
       <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}">
-        <img th:src="@{'/img/' + ${rest.photo}}">
+        <img th:if="${rest.carPhoto}"
+             th:src="@{'/img/' + ${rest.generation.manufacturer.name} + '/' + ${rest.generation.carmodel.name} + '/' + ${rest.carPhoto.name}}">
       </a>
       <div class="content">
         <a class="header" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}" th:text="${rest.bodyTypeName.name}"></a>
@@ -102,7 +103,8 @@
   <div class="ui five cards" th:if="${restyles2.size() > 0}">
     <div class="card" th:each="rest: ${restyles2}">
       <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}">
-        <img th:src="@{'/img/' + ${rest.photo}}">
+        <img th:if="${rest.carPhoto}"
+             th:src="@{'/img/' + ${rest.generation.manufacturer.name} + '/' + ${rest.generation.carmodel.name} + '/' + ${rest.carPhoto.name}}">
       </a>
       <div class="content">
         <a class="header" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}" th:text="${rest.bodyTypeName.name}"></a>
@@ -126,7 +128,8 @@
   <div class="ui five cards" th:if="${restyles3.size() > 0}">
     <div class="card" th:each="rest: ${restyles3}">
       <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}">
-        <img th:src="@{'/img/' + ${rest.photo}}">
+        <img th:if="${rest.carPhoto}"
+             th:src="@{'/img/' + ${rest.generation.manufacturer.name} + '/' + ${rest.generation.carmodel.name} + '/' + ${rest.carPhoto.name}}">
       </a>
       <div class="content">
         <a class="header" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}" th:text="${rest.bodyTypeName.name}"></a>
@@ -150,7 +153,8 @@
   <div class="ui five cards" th:if="${restyles4.size() > 0}">
     <div class="card" th:each="rest: ${restyles4}">
       <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}">
-        <img th:src="@{'/img/' + ${rest.photo}}">
+        <img th:if="${rest.carPhoto}"
+             th:src="@{'/img/' + ${rest.generation.manufacturer.name} + '/' + ${rest.generation.carmodel.name} + '/' + ${rest.carPhoto.name}}">
       </a>
       <div class="content">
         <a class="header" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}" th:text="${rest.bodyTypeName.name}"></a>
@@ -174,7 +178,8 @@
   <div class="ui five cards" th:if="${restyles5.size() > 0}">
     <div class="card" th:each="rest: ${restyles5}">
       <a class="image" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}">
-        <img th:src="@{'/img/' + ${rest.photo}}">
+        <img th:if="${rest.carPhoto}"
+             th:src="@{'/img/' + ${rest.generation.manufacturer.name} + '/' + ${rest.generation.carmodel.name} + '/' + ${rest.carPhoto.name}}">
       </a>
       <div class="content">
         <a class="header" th:href="@{/catalog/manufacturer/carmodel/generation/restyle/{id}(id=${rest.id})}" th:text="${rest.bodyTypeName.name}"></a>

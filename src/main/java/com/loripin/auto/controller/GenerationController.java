@@ -57,9 +57,11 @@ public class GenerationController {
     @Value("${upload.path}")
     private String uploadPath;
 
+    public static String manufacturer2;
+    public static String carmodel2;
+
     @GetMapping("/generationCreate")
     public String createGenerationForm(@AuthenticationPrincipal User user,
-                                       Generation generation,
                                        Model model) {
         List<Body> bodies = bodyService.findAllByOrderByNameAsc();
         model.addAttribute("bodies", bodies);
@@ -76,9 +78,9 @@ public class GenerationController {
                                    @RequestParam("file") MultipartFile file
     ) throws IOException {
 
-        File uploadDir1 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp);
-        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp +
-                "/" + CarmodelController.carModelTemp);
+        File uploadDir1 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp.getName());
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp.getName() +
+                "/" + CarmodelController.carModelTemp.getName());
 
         if (!uploadDir1.exists()) {
             uploadDir1.mkdir();
@@ -92,8 +94,8 @@ public class GenerationController {
 
         User user1 = userService.findById(user.getId());
 
-        generation.setManufacturer(carmodelService.findById(user1.getTmp()).getManufacturer());
-        generation.setCarmodel(carmodelService.findById(user1.getTmp()));
+        generation.setManufacturer(CarmodelController.manufacturerTemp);
+        generation.setCarmodel(CarmodelController.carModelTemp);
         generationService.saveGeneration(generation);
         return "redirect:/catalog/manufacturer/carmodel/" + user1.getTmp();
     }
@@ -117,6 +119,18 @@ public class GenerationController {
                                    Generation generation,
                                    @RequestParam("file") MultipartFile file
     ) throws IOException {
+
+        File uploadDir1 = new File(uploadPath + "/" + generation.getManufacturer().getName());
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + generation.getManufacturer().getName() +
+                "/" + generation.getCarmodel().getName());
+
+        if (!uploadDir1.exists()) {
+            uploadDir1.mkdir();
+        }
+
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
+        }
 
         if (file.isEmpty()) {
             generation.setCarPhoto(existingPhoto);
@@ -149,10 +163,15 @@ public class GenerationController {
         model.addAttribute("restyles5", restyles5);
         Generation generation = generationService.findById(id);
         model.addAttribute("generation", generation);
+
+        manufacturer2 = generation.getManufacturer().getName();
+        carmodel2 = generation.getCarmodel().getName();
+
         if (user != null) {
             user.setTmp(id);
             userService.save(user);
         }
+
         return "restyles";
     }
 

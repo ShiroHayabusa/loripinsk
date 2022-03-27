@@ -54,6 +54,8 @@ public class ManufacturerController {
     @Value("${upload.path}")
     private String uploadPath;
 
+    public static Long tmpManufacturer;
+
     @GetMapping("/catalog")
     public String showCatalog(Model model) {
         model.addAttribute("manufacturers", manufacturerService.findAllByOrderByNameAsc());
@@ -108,6 +110,10 @@ public class ManufacturerController {
 
         fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + manufacturer.getName());
 
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
+        }
+
         if (file.isEmpty()) {
             manufacturer.setNewLogo(existingPhoto);
         } else {
@@ -131,16 +137,20 @@ public class ManufacturerController {
         List<Carmodel> carmodels = carmodelService.findByManufacturerIdOrderByName(id);
         model.addAttribute("carmodels", carmodels);
 
-        List<Modification> modifications = modificationService.findAll();
-        model.addAttribute("modifications", modifications);
+        CarmodelController.manufacturerTemp = manufacturerService.findById(id).getName();
+        tmpManufacturer = id;
 
         if (user != null) {
-
             user.setTmp(id);
             userService.save(user);
-
         }
         return "manufacturerOpen";
+    }
+
+    @GetMapping("/catalog/manufacturer/delete/{id}")
+    public String deleteManufacturer(@PathVariable("id") Long id) {
+        manufacturerService.deleteById(id);
+        return "redirect:/catalog";
     }
 }
 

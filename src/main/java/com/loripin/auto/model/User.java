@@ -31,6 +31,7 @@ public class User implements UserDetails {
 
     private Long tmp;
     private Long tmpModification;
+    private Long tmpManufacturer;
     private Long tmpSpot;
     private Long tmpArticle;
     private Long tmpComment;
@@ -176,5 +177,13 @@ public class User implements UserDetails {
 
     public void setTmpArticle(Long tmpArticle) {
         this.tmpArticle = tmpArticle;
+    }
+
+    public Long getTmpManufacturer() {
+        return tmpManufacturer;
+    }
+
+    public void setTmpManufacturer(Long tmpManufacturer) {
+        this.tmpManufacturer = tmpManufacturer;
     }
 }

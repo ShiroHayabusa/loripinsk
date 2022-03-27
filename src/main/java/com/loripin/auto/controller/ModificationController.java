@@ -4,7 +4,6 @@ import com.loripin.auto.model.*;
 import com.loripin.auto.model.dto.SpotDto;
 import com.loripin.auto.repos.FileStorage;
 import com.loripin.auto.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static com.loripin.auto.controller.SpotController.dateAndTime;
 
@@ -166,9 +162,9 @@ public class ModificationController {
                                      @RequestParam("files") MultipartFile[] files
     ) throws IOException {
 
-        File uploadDir1 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp);
-        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp +
-                "/" + CarmodelController.carModelTemp);
+        File uploadDir1 = new File(uploadPath + "/" + RestyleController.manufacturer1);
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + RestyleController.manufacturer1 +
+                "/" + RestyleController.carmodel1);
 
         if (!uploadDir1.exists()) {
             uploadDir1.mkdir();
@@ -180,8 +176,9 @@ public class ModificationController {
 
         modification.setCarPhoto(fileUpload.fileUpload(file1));
 
-        List<Photo> photos = fileUpload.multiFilesUpload(files);
-        modification.setCarPhotos(photos);
+        if (!files[0].getOriginalFilename().isEmpty()) {
+            modification.setCarPhotos(fileUpload.multiFilesUpload(files));
+        }
 
         User user1 = userService.findById(user.getId());
 
@@ -189,40 +186,6 @@ public class ModificationController {
         modification.setAltName(null);
         modificationService.saveModification(modification);
         return "redirect:/catalog/manufacturer/carmodel/generation/restyle/" + user1.getTmp();
-    }
-
-    public void uploadFile(Modification modification,
-                           @RequestParam("file1") MultipartFile file1
-    ) throws IOException {
-        if (file1 != null) {
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-            String uuidFile = UUID.randomUUID().toString();
-            resultFilename = uuidFile + "." + file1.getOriginalFilename();
-            file1.transferTo(new File(uploadPath + "/" + resultFilename));
-        }
-    }
-
-    public List<String> uploadFiles(Model model,
-                                    @RequestParam("files") MultipartFile[] files) {
-        List<String> fileNames = null;
-        try {
-            fileNames = Arrays.asList(files)
-                    .stream()
-                    .map(file -> {
-                        fileStorage.store(file);
-                        return file.getOriginalFilename();
-                    })
-                    .collect(Collectors.toList());
-            model.addAttribute("message", "Files uploaded successfully!");
-            model.addAttribute("files", fileNames);
-        } catch (Exception e) {
-            model.addAttribute("message", "Fail!");
-            model.addAttribute("files", fileNames);
-        }
-        return fileNames;
     }
 
     @GetMapping("modificationUpdate/{id}")
@@ -269,8 +232,19 @@ public class ModificationController {
                                      @RequestParam("files") MultipartFile[] files)
             throws IOException {
 
-        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + CarmodelController.manufacturerTemp +
-                "/" + CarmodelController.carModelTemp);
+
+        File uploadDir1 = new File(uploadPath + "/" + modification.getBodyType().getGeneration().getManufacturer().getName());
+        fileStorageImpl.uploadDir2 = new File(uploadPath + "/" + modification.getBodyType().getGeneration().getManufacturer().getName() +
+                "/" + modification.getBodyType().getGeneration().getCarmodel().getName());
+
+        if (!uploadDir1.exists()) {
+            uploadDir1.mkdir();
+        }
+
+        if (!fileStorageImpl.uploadDir2.exists()) {
+            fileStorageImpl.uploadDir2.mkdir();
+        }
+
 
         if (file1.isEmpty()) {
             modification.setCarPhoto(existingPhoto);
@@ -278,7 +252,7 @@ public class ModificationController {
             modification.setCarPhoto(fileUpload.fileUpload(file1));
         }
 
-        if (files[0].getOriginalFilename() == "") {
+        if (files[0].getOriginalFilename() == "" || files[0].isEmpty()) {
             modification.setCarPhotos(existingPhotos);
         } else {
             modification.setCarPhotos(fileUpload.multiFilesUpload(files));

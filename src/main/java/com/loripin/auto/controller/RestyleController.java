@@ -86,7 +86,7 @@ public class RestyleController {
     public String updateRestyleForm(@AuthenticationPrincipal User user,
                                     @PathVariable("id") Long id,
                                     Model model) {
-        List<BodyTypeName> bodyTypeNames = bodyTypeNameService.findAllByOrderByIdAsc();
+        List<BodyTypeName> bodyTypeNames = bodyTypeNameService.findAllByOrderByNameAsc();
         model.addAttribute("bodyTypeNames", bodyTypeNames);
         BodyType bodyType = bodyTypeService.findById(id);
         model.addAttribute("bodyType", bodyType);

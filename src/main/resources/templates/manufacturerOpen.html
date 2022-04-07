@@ -59,6 +59,21 @@
         <div class="ui link list">
 
             <h3 class="ui dividing header">
+                0
+            </h3>
+            <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'0')}">
+                <div>
+                    <a class="item" th:href="@{/catalog/manufacturer/carmodel/{id}(id=${models.id})}">
+                        <span th:text="${models.name}"></span>
+                    </a>
+                    <a th:href="@{/catalog/manufacturer/carmodel/delete/{id}(id=${models.id})}"
+                       sec:authorize="hasAuthority('ADMIN')">
+                        <i class="grey small x icon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <h3 class="ui dividing header">
                 1
             </h3>
             <div th:each="models: ${carmodels}" th:if="${#strings.startsWith(models.name,'1')}">
